@@ -1,0 +1,24 @@
+{
+  "name": "zilliqa-js",
+  "version": "1.0.0",
+  "description": "Zilliqa blockchain implementation on javascript.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "ts-node index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hicaru/zilliqa-js.git"
+  },
+  "author": "Rinat",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/hicaru/zilliqa-js/issues"
+  },
+  "homepage": "https://github.com/hicaru/zilliqa-js#readme",
+  "devDependencies": {
+    "ts-node": "^8.10.2",
+    "typescript": "^3.9.7"
+  }
+}
