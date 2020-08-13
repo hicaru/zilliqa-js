@@ -7,7 +7,6 @@ export class DSBlockHeader extends BaseBlockHeader {
     dsDifficulty: number;
     difficulty: number;
     leaderPubKey: string;
-    blockNum: number;
     epochNum: number;
     gasPrice: BN;
     swInfo: SWInfo;
@@ -30,12 +29,11 @@ export class DSBlockHeader extends BaseBlockHeader {
         removeDSNodePubkeys: string,
         hashset: string[]
     ) {
-        super(version, committeeHash, prevHash);
+        super(version, committeeHash, prevHash, blockNum);
 
         this.dsDifficulty = dsDifficulty;
         this.difficulty = difficulty;
         this.leaderPubKey = leaderPubKey;
-        this.blockNum = blockNum;
         this.epochNum = epochNum;
         this.gasPrice = gasPrice;
         this.swInfo = swInfo;
@@ -46,16 +44,12 @@ export class DSBlockHeader extends BaseBlockHeader {
 }
 
 export class DSBlock extends BaseBlock {
-    dsBlockHeader: DSBlockHeader;
-
     constructor(
         blockHash: string,
         timestamp: number,
         cosigs: CoSignatures,
         dsBlockHeader: DSBlockHeader
     ) {
-        super(blockHash, timestamp, cosigs);
-
-        this.dsBlockHeader = dsBlockHeader;
+        super(blockHash, timestamp, cosigs, dsBlockHeader);
     }
 }

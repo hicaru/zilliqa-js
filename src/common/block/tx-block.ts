@@ -7,7 +7,6 @@ export class MicroBlockHeader extends BaseBlockHeader {
     gasLimit: BN;
     gasUsed: BN;
     rewards: BN;
-    blockNum: number;
     hashset: string[];
     numTxs: number;
     minerPubKey: string;
@@ -26,12 +25,11 @@ export class MicroBlockHeader extends BaseBlockHeader {
         minerPubKey: string,
         dsBlockNum: number
     ) {
-        super(version, committeeHash, prevHash);
+        super(version, committeeHash, prevHash, blockNum);
 
         this.gasLimit = gasLimit;
         this.gasUsed = gasUsed;
         this.rewards = rewards;
-        this.blockNum = blockNum;
         this.hashset = hashset;
         this.numTxs = numTxs;
         this.minerPubKey = minerPubKey;
@@ -40,7 +38,6 @@ export class MicroBlockHeader extends BaseBlockHeader {
 }
 
 export class TxBlock extends BaseBlock {
-    txBlockHeader: MicroBlockHeader;
     microBlockInfo: MicroBlockInfo;
 
     constructor(
@@ -50,9 +47,8 @@ export class TxBlock extends BaseBlock {
         txBlockHeader: MicroBlockHeader,
         microBlockInfo: MicroBlockInfo
     ) {
-        super(blockHash, timestamp, cosigs);
+        super(blockHash, timestamp, cosigs, txBlockHeader);
 
         this.microBlockInfo = microBlockInfo;
-        this.txBlockHeader = txBlockHeader;
     }
 }

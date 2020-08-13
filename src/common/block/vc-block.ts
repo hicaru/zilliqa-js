@@ -37,16 +37,12 @@ export class VcBlockHeader extends BaseBlockHeader {
 }
 
 export class VcBlock extends BaseBlock {
-    vcBlockHeader: VcBlockHeader;
-
     constructor(
         blockHash: string,
         timestamp: number,
         cosigs: CoSignatures,
         vcBlockHeader: VcBlockHeader
     ) {
-        super(blockHash, timestamp, cosigs);
-
-        this.vcBlockHeader = vcBlockHeader;
+        super(blockHash, timestamp, cosigs, vcBlockHeader);
     }
 }

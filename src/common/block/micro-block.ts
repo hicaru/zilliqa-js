@@ -39,7 +39,6 @@ export class MicroBlockHeader extends BaseBlockHeader {
 }
 
 export class MicroBlock extends BaseBlock {
-    microBlockHeader: MicroBlockHeader;
     hashes: string[];
 
     constructor(
@@ -49,9 +48,8 @@ export class MicroBlock extends BaseBlock {
         microBlockHeader: MicroBlockHeader,
         hashes: string[]
     ) {
-        super(blockHash, timestamp, cosigs);
+        super(blockHash, timestamp, cosigs, microBlockHeader);
 
-        this.microBlockHeader = microBlockHeader;
         this.hashes = hashes;
     }
 }
