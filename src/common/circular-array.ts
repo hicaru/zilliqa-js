@@ -1,11 +1,15 @@
-import { BaseBlock } from 'src/common/block';
-
 export class CircularArray<T> {
     private items: {
         [blockNumber: number]: T;
     } = {}
 
     add(item: T, key: number) {
+        if (this.getLastnumber() >= key && key !== 0) {
+            const msg = 'block number inconsistent, increase the size of, CircularArray, blockNumMissed'
+
+            throw new Error(msg);
+        }
+
         this.items[key] = item;
     }
 
@@ -17,9 +21,15 @@ export class CircularArray<T> {
         return Object.keys(this.items).length;
     }
 
-    getLast(): T {
+    getLastnumber(): number {
         const keys = Object.keys(this.items).map(Number);
         const lastNumber = Math.max.apply(Math, keys);
+
+        return lastNumber;
+    }
+
+    getLast(): T {
+        const lastNumber = this.getLastnumber()
 
         return this.items[lastNumber];
     }

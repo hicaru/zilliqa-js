@@ -31,4 +31,16 @@ export class BlockChain {
 
         return null;
     }
+
+    addBlock(block: BaseBlock) {
+        try {
+            const blockNumber = block.getHeader().getBlockNum();
+
+            this.blocks.add(block, blockNumber);
+
+            return true;
+        } catch (err) {
+            return false;
+        }
+    }
 }
