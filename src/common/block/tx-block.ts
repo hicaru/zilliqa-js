@@ -41,13 +41,13 @@ export class TxBlock extends BaseBlock {
     microBlockInfo: MicroBlockInfo;
 
     constructor(
-        blockHash: string,
         timestamp: number,
+        difficulty: number,
         cosigs: CoSignatures,
         txBlockHeader: MicroBlockHeader,
         microBlockInfo: MicroBlockInfo
     ) {
-        super(blockHash, timestamp, cosigs, txBlockHeader);
+        super(timestamp, difficulty, cosigs, txBlockHeader);
 
         this.microBlockInfo = microBlockInfo;
     }

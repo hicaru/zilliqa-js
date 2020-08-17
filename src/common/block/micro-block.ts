@@ -42,13 +42,13 @@ export class MicroBlock extends BaseBlock {
     hashes: string[];
 
     constructor(
-        blockHash: string,
         timestamp: number,
+        difficulty: number,
         cosigs: CoSignatures,
         microBlockHeader: MicroBlockHeader,
         hashes: string[]
     ) {
-        super(blockHash, timestamp, cosigs, microBlockHeader);
+        super(timestamp, difficulty, cosigs, microBlockHeader);
 
         this.hashes = hashes;
     }

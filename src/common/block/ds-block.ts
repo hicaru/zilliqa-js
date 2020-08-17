@@ -45,11 +45,13 @@ export class DSBlockHeader extends BaseBlockHeader {
 
 export class DSBlock extends BaseBlock {
     constructor(
-        blockHash: string,
         timestamp: number,
+        difficulty: number,
         cosigs: CoSignatures,
         dsBlockHeader: DSBlockHeader
     ) {
-        super(blockHash, timestamp, cosigs, dsBlockHeader);
+        super(timestamp, difficulty, cosigs, dsBlockHeader);
+
+        this._updateHash();
     }
 }

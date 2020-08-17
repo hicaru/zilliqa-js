@@ -40,11 +40,11 @@ export class FBBlockHeader extends BaseBlockHeader {
 
 export class FBBlock extends BaseBlock {
     constructor(
-        blockHash: string,
         timestamp: number,
+        difficulty: number,
         cosigs: CoSignatures,
         fallbackBlockHeader: FBBlockHeader
     ) {
-        super(blockHash, timestamp, cosigs, fallbackBlockHeader);
+        super(timestamp, difficulty, cosigs, fallbackBlockHeader);
     }
 }
