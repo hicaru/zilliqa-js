@@ -3,9 +3,10 @@
   "version": "1.0.0",
   "description": "Zilliqa blockchain implementation on javascript.",
   "main": "index.ts",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node index.ts",
+    "start": "tsc && node src/index.js",
     "type-check": "tsc",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "precommit": "npm run lint && npm run type-check"

@@ -1,9 +1,11 @@
 import log from 'loglevel';
 import { CircularArray } from 'src/common';
 import { BaseBlock } from 'src/common/block';
+import { GENESIS_DS_BLOCK, DIFFICULTY } from 'src/config';
 
 export class BlockChain {
     blocks = new CircularArray<BaseBlock>();
+    difficulty: number;
 
     get getBlockCount() {
         return this.blocks.size();
@@ -13,7 +15,13 @@ export class BlockChain {
         return this.blocks.getLast();
     }
 
-    constructor() {}
+    constructor() {
+        this.difficulty = DIFFICULTY;
+
+        if (this.blocks.size() === 0) {
+            this.addBlock(GENESIS_DS_BLOCK);
+        }
+    }
 
     public getBlock(blockNum: number) {
         const blockNumber = this

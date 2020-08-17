@@ -1,61 +1,37 @@
-import BN from 'bn.js';
-import { SHA256 } from 'crypto-js';
-
-export class BaseBlockHeader {
-    protected version: BN;
-    protected prevHash: string;
-    protected blockNum: number;
-
-    constructor(
-        version: BN,
-        prevHash: string,
-        blockNum: number = 0
-    ) {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.BaseBlock = exports.BaseBlockHeader = void 0;
+const crypto_js_1 = require("crypto-js");
+class BaseBlockHeader {
+    constructor(version, prevHash, blockNum = 0) {
         this.version = version;
         this.prevHash = prevHash;
         this.blockNum = blockNum;
     }
-
-    public getBlockNum() {
+    getBlockNum() {
         return this.blockNum;
     }
-
-    public serialize() {
+    serialize() {
         return JSON.stringify(this);
     }
-
-    public incrementBlockNumber() {
+    incrementBlockNumber() {
         this.blockNum++;
-
         return this.blockNum;
     }
 }
-
-export class BaseBlock {
-    protected blockHash!: string;
-    protected timestamp!: number;
-    protected difficulty: number;
-
-    blockHeader!: BaseBlockHeader;
-
-    constructor(
-        timestamp: number,
-        difficulty: number,
-        blockHeader: BaseBlockHeader
-    ) {
+exports.BaseBlockHeader = BaseBlockHeader;
+class BaseBlock {
+    constructor(timestamp, difficulty, blockHeader) {
         this.timestamp = timestamp;
         this.difficulty = difficulty;
         this.blockHeader = blockHeader;
     }
-
-    protected _updateHash() {
+    _updateHash() {
         this.blockHash = this.calculateHash();
     }
-
-    public incrementBlockNumber() {
+    incrementBlockNumber() {
         return this.blockHeader.incrementBlockNumber();
     }
-
     /**
      * Returns the header of the block.
      *
@@ -70,10 +46,9 @@ export class BaseBlock {
      * That means that any change on the above fields will produce a different
      * header, and thus a different hash.
      */
-    getHeader(): BaseBlockHeader {
+    getHeader() {
         return this.blockHeader;
     }
-
     /**
      * Checks if the block is a valid block.
      *
@@ -84,34 +59,27 @@ export class BaseBlock {
      *
      * @returns {boolean} Whether the block is valid or not.
      */
-    isValid(): boolean {
+    isValid() {
         if (this.blockHash !== this.calculateHash()) {
             return false;
         }
-
         if (!this.blockHash.startsWith('0'.repeat(this.difficulty))) {
             return false;
         }
-
         return true;
     }
-
     /**
      * Calculates the hash of the block.
      *
      * @returns {string} The hash of the block.
      */
-    calculateHash(): string {
+    calculateHash() {
         const serializeBlock = this.serialize();
-
-        return SHA256(serializeBlock).toString();
+        return crypto_js_1.SHA256(serializeBlock).toString();
     }
-
-    serialize(): string {
-        return JSON.stringify({
-            ...this.getHeader(),
-            timestamp: this.timestamp,
-            difficulty: this.difficulty
-        });
+    serialize() {
+        return JSON.stringify(Object.assign(Object.assign({}, this.getHeader()), { timestamp: this.timestamp, difficulty: this.difficulty }));
     }
 }
+exports.BaseBlock = BaseBlock;
+//# sourceMappingURL=base-block.js.map

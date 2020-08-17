@@ -1,26 +1,19 @@
 {
-    "compilerOptions": {
-      "baseUrl": "./",
-      "rootDir": "./",
-      "incremental": true,
-      "removeComments": true,
-      "preserveConstEnums": true,
-      "sourceMap": true,
-      "strict": true,
-      "noImplicitReturns": true,
-      "moduleResolution": "node",
-      "stripInternal": false,
-      "noEmit": true,
-      "allowSyntheticDefaultImports": true,
-      "lib": [
-        "esnext",
-        "dom"
-      ],
-      "exclude": ["node_modules"],
-      "target": "esnext",
-      "include": [
-        "src",
-        "**/*.ts"
-      ]
-    }
-  }
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "./",
+    "rootDir": "./",
+    "lib": ["es5", "es6"],
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "sourceMap": true
+  },
+  "exclude": ["node_modules"],
+  "include": [
+    "src",
+    "**/*.ts"
+  ]
+}

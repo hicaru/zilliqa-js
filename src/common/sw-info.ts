@@ -11,16 +11,16 @@ export class SWInfo {
     scillaCommit: number;
 
     constructor(
-        zilliqaMajorVersion: number,
-        zilliqaMinorVersion: number,
-        zilliqaFixVersion: number,
-        zilliqaUpgradeDS: number,
-        zilliqaCommit: number,
-        scillaMajorVersion: number,
-        scillaMinorVersion: number,
-        scillaFixVersion: number,
-        scillaUpgradeDS: number,
-        scillaCommit: number
+        zilliqaMajorVersion = 0,
+        zilliqaMinorVersion = 0,
+        zilliqaFixVersion = 0,
+        zilliqaUpgradeDS = 0,
+        zilliqaCommit = 0,
+        scillaMajorVersion = 0,
+        scillaMinorVersion = 0,
+        scillaFixVersion = 0,
+        scillaUpgradeDS = 0,
+        scillaCommit = 0
     ) {
         this.zilliqaMajorVersion = zilliqaMajorVersion;
         this.zilliqaMinorVersion = zilliqaMinorVersion;

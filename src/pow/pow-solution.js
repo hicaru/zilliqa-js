@@ -1,10 +1,8 @@
-import BN from 'bn.js';
-
-import { DSBlock, BaseBlock } from 'src/common/block';
-
-export class PowSolution {
-    constructor() {}
-
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.PowSolution = void 0;
+class PowSolution {
+    constructor() { }
     /**
      * Mines a block.
      *
@@ -16,14 +14,14 @@ export class PowSolution {
      *
      * @returns {Promise} A promise for the mined block.
      */
-    mineDSBlock(block: DSBlock): Promise<BaseBlock> {
+    mineDSBlock(block) {
         const minedBlock = block;
-
         return new Promise((resolve) => {
             (function loop() {
                 if (minedBlock.isValid()) {
                     resolve(minedBlock);
-                } else {
+                }
+                else {
                     minedBlock.incrementBlockNumber();
                     minedBlock.calculateHash();
                     // Give Node.js the chance to clear the stack.
@@ -33,3 +31,5 @@ export class PowSolution {
         });
     }
 }
+exports.PowSolution = PowSolution;
+//# sourceMappingURL=pow-solution.js.map
