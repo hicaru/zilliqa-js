@@ -20,7 +20,6 @@ export const GENESIS_DS_BLOCK = new DSBlock(
         DIFFICULTY,
         MINER_PUBKEY,
         GENESIS_BLOCK_NUMBER,
-        GENESIS_BLOCK_NUMBER,
         DEFAULT_GAS_PRICE
     )
 );

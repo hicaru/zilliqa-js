@@ -1,11 +1,11 @@
 import BN from 'bn.js';
 import { BaseBlock, BaseBlockHeader } from './base-block';
+import { validator } from '../../crypto';
 
 export class DSBlockHeader extends BaseBlockHeader {
     dsDifficulty: number;
     difficulty: number;
     leaderPubKey: string;
-    epochNum: number;
     gasPrice: BN;
 
     constructor(
@@ -15,7 +15,6 @@ export class DSBlockHeader extends BaseBlockHeader {
         difficulty: number,
         leaderPubKey: string,
         blockNum: number,
-        epochNum: number,
         gasPrice: BN
     ) {
         super(version, prevHash, blockNum);
@@ -23,7 +22,6 @@ export class DSBlockHeader extends BaseBlockHeader {
         this.dsDifficulty = dsDifficulty;
         this.difficulty = difficulty;
         this.leaderPubKey = leaderPubKey;
-        this.epochNum = epochNum;
         this.gasPrice = gasPrice;
     }
 }
@@ -47,7 +45,6 @@ export class DSBlock extends BaseBlock {
             difficulty: this.difficulty,
             dsDifficulty: header.dsDifficulty,
             leaderPubKey: header.leaderPubKey,
-            epochNum: header.epochNum,
             gasPrice: header.gasPrice
         });
     }
@@ -63,9 +60,6 @@ export class DSBlock extends BaseBlock {
 
         const header = this.getHeader() as DSBlockHeader;
 
-        return this
-            .blockHash
-            .substring(0, header.dsDifficulty) !== Array(header.dsDifficulty + 1)
-            .join('0');
+        return validator(this.blockHash, header.dsDifficulty);
     }
 }

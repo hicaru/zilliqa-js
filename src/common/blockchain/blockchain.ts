@@ -75,7 +75,6 @@ export class BlockChain {
                 this.difficulty,
                 MINER_PUBKEY,
                 lastBlock.getHeader().getBlockNum() + 1,
-                lastBlock.getHeader().getBlockNum() + 1,
                 DEFAULT_GAS_PRICE
             );
             const timestamp = new Date().valueOf();
