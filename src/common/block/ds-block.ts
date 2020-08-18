@@ -52,6 +52,10 @@ export class DSBlock extends BaseBlock {
         });
     }
 
+    /**
+     * Starts the mining process on the block. It changes the 'nonce' until the hash
+     * of the block starts with enough zeros (= difficulty)
+     */
     isValid(): boolean {
         if (this.blockHash !== this.calculateHash()) {
             return false;

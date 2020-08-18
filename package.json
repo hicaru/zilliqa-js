@@ -37,7 +37,6 @@
   },
   "dependencies": {
     "bn.js": "^5.1.2",
-    "crypto-js": "^4.0.0",
-    "loglevel": "^1.6.8"
+    "crypto-js": "^4.0.0"
   }
 }

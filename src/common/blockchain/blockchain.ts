@@ -1,4 +1,3 @@
-import log from 'loglevel';
 import BN from 'bn.js';
 
 import { CircularArray } from '../circular-array';
@@ -49,7 +48,7 @@ export class BlockChain {
             .getBlockNum();
 
         if (this.getBlockCount > 0 && blockNumber < blockNum) {
-            log.warn(`BlockNum too high ${blockNum} Dummy block used`);
+            console.warn(`BlockNum too high ${blockNum} Dummy block used`);
         } else if (!this.blocks.has(blockNum)) {
             // Get from store...
         } else {
@@ -66,7 +65,7 @@ export class BlockChain {
             this.blocks.add(minedBlock, minedBlock.getHeader().blockNum);
             
             // console.log();
-            log.debug(minedBlock.getHeader().blockNum)
+            console.debug(minedBlock)
 
             const lastBlock = this._getLastBlock();
             const header = new DSBlockHeader(
