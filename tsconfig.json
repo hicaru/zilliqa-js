@@ -1,19 +1,25 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "baseUrl": "./",
-    "rootDir": "./",
-    "lib": ["es5", "es6"],
-    "target": "es6",
-    "module": "commonjs",
-    "moduleResolution": "node",
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "sourceMap": true
+      "target": "es5",
+      "module": "commonjs",
+      "sourceMap": true,
+      "outDir": "./dist",
+      "rootDir": "./",
+      /* Strict Type-Checking Options */
+      "strict": true,
+      "noImplicitAny": true,
+      /* Module Resolution Options */
+      "moduleResolution": "node",
+      "baseUrl": "./",
+      "esModuleInterop": true,
+      /* Advanced Options */
+      "skipLibCheck": true,
+      "forceConsistentCasingInFileNames": true
   },
-  "exclude": ["node_modules"],
+  "lib": ["es2015"],
   "include": [
     "src",
-    "**/*.ts"
-  ]
+    "src/**/*"
+  ],
+  "exclude": ["node_modules"]
 }

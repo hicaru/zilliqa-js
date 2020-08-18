@@ -1,6 +1,5 @@
 import BN from 'bn.js';
 import { BaseBlock, BaseBlockHeader } from 'src/common/block/base-block';
-import { CoSignatures } from 'types';
 
 export class MicroBlockHeader extends BaseBlockHeader {
     shardId: number;
@@ -15,7 +14,6 @@ export class MicroBlockHeader extends BaseBlockHeader {
     constructor(
         version: BN,
         committeeHash: string,
-        prevHash: string,
         shardId: number,
         gasLimit: BN,
         rewards: BN,
@@ -25,7 +23,7 @@ export class MicroBlockHeader extends BaseBlockHeader {
         minerPubKey: string,
         dsBlockNum: number
     ) {
-        super(version, committeeHash, prevHash);
+        super(version, committeeHash);
 
         this.gasLimit = gasLimit;
         this.rewards = rewards;
@@ -44,11 +42,10 @@ export class MicroBlock extends BaseBlock {
     constructor(
         timestamp: number,
         difficulty: number,
-        cosigs: CoSignatures,
         microBlockHeader: MicroBlockHeader,
         hashes: string[]
     ) {
-        super(timestamp, difficulty, cosigs, microBlockHeader);
+        super(timestamp, difficulty, microBlockHeader);
 
         this.hashes = hashes;
     }

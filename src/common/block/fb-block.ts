@@ -1,6 +1,5 @@
 import BN from 'bn.js';
 import { BaseBlock, BaseBlockHeader } from 'src/common/block/base-block';
-import { CoSignatures } from 'types';
 
 export class FBBlockHeader extends BaseBlockHeader {
     fallbackDSEpochNo: number;
@@ -15,7 +14,6 @@ export class FBBlockHeader extends BaseBlockHeader {
     constructor(
         version: BN,
         committeeHash: string,
-        prevHash: string,
         fallbackDSEpochNo: number,
         fallbackEpochNo: number,
         fallbackState: number,
@@ -25,7 +23,7 @@ export class FBBlockHeader extends BaseBlockHeader {
         leaderPubKey: string,
         shardId: number
     ) {
-        super(version, committeeHash, prevHash);
+        super(version, committeeHash);
 
         this.fallbackDSEpochNo = fallbackDSEpochNo;
         this.fallbackEpochNo = fallbackEpochNo;
@@ -42,9 +40,8 @@ export class FBBlock extends BaseBlock {
     constructor(
         timestamp: number,
         difficulty: number,
-        cosigs: CoSignatures,
         fallbackBlockHeader: FBBlockHeader
     ) {
-        super(timestamp, difficulty, cosigs, fallbackBlockHeader);
+        super(timestamp, difficulty, fallbackBlockHeader);
     }
 }

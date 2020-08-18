@@ -1,7 +1,6 @@
 import BN from 'bn.js';
 
 import { BaseBlock, BaseBlockHeader } from 'src/common/block/base-block';
-import { CoSignatures } from 'types';
 
 export class VcBlockHeader extends BaseBlockHeader {
     viewWChangeDSEpochNo: number;
@@ -15,7 +14,6 @@ export class VcBlockHeader extends BaseBlockHeader {
     constructor(
         version: BN,
         committeeHash: string,
-        prevHash: string,
         viewWChangeDSEpochNo: number,
         viewWChangeEpochNo: number,
         viewChangeState: string,
@@ -24,7 +22,7 @@ export class VcBlockHeader extends BaseBlockHeader {
         vcCounter: number,
         faultyLeaders: string
     ) {
-        super(version, committeeHash, prevHash);
+        super(version, committeeHash);
 
         this.viewWChangeDSEpochNo = viewWChangeDSEpochNo;
         this.viewWChangeEpochNo = viewWChangeEpochNo;
@@ -40,9 +38,8 @@ export class VcBlock extends BaseBlock {
     constructor(
         timestamp: number,
         difficulty: number,
-        cosigs: CoSignatures,
         vcBlockHeader: VcBlockHeader
     ) {
-        super(timestamp, difficulty, cosigs, vcBlockHeader);
+        super(timestamp, difficulty, vcBlockHeader);
     }
 }
