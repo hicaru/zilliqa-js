@@ -1,6 +1,6 @@
 import BN from 'bn.js';
 
-import { BaseBlock, BaseBlockHeader } from 'src/common/block/base-block';
+import { BaseBlock, BaseBlockHeader } from './base-block';
 import { MicroBlockInfo } from 'types';
 
 export class MicroBlockHeader extends BaseBlockHeader {

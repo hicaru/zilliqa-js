@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import { BaseBlock, BaseBlockHeader } from 'src/common/block/base-block';
+import { BaseBlock, BaseBlockHeader } from './base-block';
 
 export class MicroBlockHeader extends BaseBlockHeader {
     shardId: number;

@@ -1,5 +1,6 @@
 import BN from 'bn.js';
-import { SWInfo, DSBlock, DSBlockHeader } from 'src/common';
+import { DSBlock, DSBlockHeader } from '../common';
+import { SWInfo } from '../common/sw-info';
 
 export const VERSION = new BN(1);
 export const ZERO_HASH = '0000000000000000000000000000000000000000000000000000000000000000';

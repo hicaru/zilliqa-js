@@ -1,6 +1,6 @@
 import BN from 'bn.js';
 
-import { BaseBlock, BaseBlockHeader } from 'src/common/block/base-block';
+import { BaseBlock, BaseBlockHeader } from './base-block';
 
 export class VcBlockHeader extends BaseBlockHeader {
     viewWChangeDSEpochNo: number;

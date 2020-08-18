@@ -1,7 +1,7 @@
 import log from 'loglevel';
-import { CircularArray } from 'src/common';
-import { BaseBlock } from 'src/common/block';
-import { GENESIS_DS_BLOCK, DIFFICULTY } from 'src/config';
+import { CircularArray } from '../circular-array';
+import { BaseBlock } from '../block';
+import { GENESIS_DS_BLOCK, DIFFICULTY } from '../../config';
 
 export class BlockChain {
     blocks = new CircularArray<BaseBlock>();
