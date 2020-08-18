@@ -2,9 +2,9 @@ import BN from 'bn.js';
 import { SHA256 } from 'crypto-js';
 
 export class BaseBlockHeader {
-    protected version: BN;
-    protected prevHash: string;
-    protected blockNum: number;
+    public version: BN;
+    public prevHash: string;
+    public blockNum: number;
 
     constructor(
         version: BN,
@@ -32,7 +32,7 @@ export class BaseBlockHeader {
 }
 
 export class BaseBlock {
-    protected blockHash!: string;
+    public blockHash!: string;
     protected timestamp!: number;
     protected difficulty: number;
 
@@ -89,11 +89,7 @@ export class BaseBlock {
             return false;
         }
 
-        if (!this.blockHash.startsWith('0'.repeat(this.difficulty))) {
-            return false;
-        }
-
-        return true;
+        return this.blockHash.substring(0, this.difficulty) !== Array(this.difficulty + 1).join('0');
     }
 
     /**

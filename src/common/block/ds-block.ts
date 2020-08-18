@@ -38,4 +38,30 @@ export class DSBlock extends BaseBlock {
 
         this._updateHash();
     }
+
+    serialize(): string {
+        const header = this.getHeader() as DSBlockHeader;
+
+        return JSON.stringify({
+            timestamp: this.timestamp,
+            difficulty: this.difficulty,
+            dsDifficulty: header.dsDifficulty,
+            leaderPubKey: header.leaderPubKey,
+            epochNum: header.epochNum,
+            gasPrice: header.gasPrice
+        });
+    }
+
+    isValid(): boolean {
+        if (this.blockHash !== this.calculateHash()) {
+            return false;
+        }
+
+        const header = this.getHeader() as DSBlockHeader;
+
+        return this
+            .blockHash
+            .substring(0, header.dsDifficulty) !== Array(header.dsDifficulty + 1)
+            .join('0');
+    }
 }

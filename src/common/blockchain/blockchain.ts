@@ -1,11 +1,24 @@
 import log from 'loglevel';
+import BN from 'bn.js';
+
 import { CircularArray } from '../circular-array';
-import { BaseBlock } from '../block';
-import { GENESIS_DS_BLOCK, DIFFICULTY } from '../../config';
+import { BaseBlock, DSBlock, DSBlockHeader } from '../block';
+import { PowSolution } from '../../pow';
+import {
+    GENESIS_DS_BLOCK,
+    DIFFICULTY,
+    VERSION,
+    DS_DIFFICULTY,
+    MINER_PUBKEY,
+    DEFAULT_GAS_PRICE
+} from '../../config';
 
 export class BlockChain {
     blocks = new CircularArray<BaseBlock>();
+    pow = new PowSolution();
     difficulty: number;
+    dsDifficulty: number;
+    version: BN;
 
     get getBlockCount() {
         return this.blocks.size();
@@ -17,10 +30,16 @@ export class BlockChain {
 
     constructor() {
         this.difficulty = DIFFICULTY;
+        this.dsDifficulty = DS_DIFFICULTY;
+        this.version = VERSION;
 
         if (this.blocks.size() === 0) {
             this.addBlock(GENESIS_DS_BLOCK);
         }
+    }
+
+    private _getLastBlock() {
+        return this.blocks.getLast();
     }
 
     public getBlock(blockNum: number) {
@@ -40,15 +59,36 @@ export class BlockChain {
         return null;
     }
 
-    addBlock(block: BaseBlock) {
+    async addBlock(block: BaseBlock) {
         try {
-            const blockNumber = block.getHeader().getBlockNum();
+            const minedBlock = await this.pow.mineDSBlock(block);
 
-            this.blocks.add(block, blockNumber);
+            this.blocks.add(minedBlock, minedBlock.getHeader().blockNum);
+            
+            // console.log();
+            log.debug(minedBlock.getHeader().blockNum)
+
+            const lastBlock = this._getLastBlock();
+            const header = new DSBlockHeader(
+                this.version,
+                lastBlock.blockHash,
+                this.dsDifficulty,
+                this.difficulty,
+                MINER_PUBKEY,
+                lastBlock.getHeader().getBlockNum() + 1,
+                lastBlock.getHeader().getBlockNum() + 1,
+                DEFAULT_GAS_PRICE
+            );
+            const timestamp = new Date().valueOf();
+            const newBlock = new DSBlock(timestamp, this.dsDifficulty, header);
+
+            this.addBlock(newBlock);
 
             return true;
         } catch (err) {
             return false;
         }
     }
+
+
 }
