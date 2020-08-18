@@ -3,6 +3,10 @@ export class CircularArray<T> {
         [blockNumber: number]: T;
     } = {}
 
+    public get list() {
+        return this.items;
+    }
+
     add(item: T, key: number) {
         if (this.getLastnumber() >= key && key !== 0) {
             const msg = 'block number inconsistent, increase the size of, CircularArray, blockNumMissed'

@@ -63,9 +63,8 @@ export class BlockChain {
             const minedBlock = await this.pow.mineDSBlock(block);
 
             this.blocks.add(minedBlock, minedBlock.getHeader().blockNum);
-            
-            // console.log();
-            console.debug(minedBlock)
+
+            // console.debug(minedBlock)
 
             const lastBlock = this._getLastBlock();
             const header = new DSBlockHeader(

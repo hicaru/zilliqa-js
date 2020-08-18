@@ -1,8 +1,12 @@
 import BN from 'bn.js';
 import { BaseBlock, BaseBlockHeader } from './base-block';
+import { TxBlock } from './tx-block';
 import { validator } from '../../crypto';
+import { CircularArray } from '../circular-array';
 
 export class DSBlockHeader extends BaseBlockHeader {
+    txBlocks = new CircularArray<TxBlock>();
+
     dsDifficulty: number;
     difficulty: number;
     leaderPubKey: string;
@@ -45,7 +49,8 @@ export class DSBlock extends BaseBlock {
             difficulty: this.difficulty,
             dsDifficulty: header.dsDifficulty,
             leaderPubKey: header.leaderPubKey,
-            gasPrice: header.gasPrice
+            gasPrice: header.gasPrice,
+            txBlocks: header.txBlocks.list
         });
     }
 
