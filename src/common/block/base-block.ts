@@ -1,5 +1,6 @@
 import BN from 'bn.js';
 import { SHA256 } from 'crypto-js';
+import { validator } from '../../crypto';
 
 export class BaseBlockHeader {
     public version: BN;
@@ -89,7 +90,7 @@ export class BaseBlock {
             return false;
         }
 
-        return this.blockHash.substring(0, this.difficulty) !== Array(this.difficulty + 1).join('0');
+        return validator(this.blockHash, this.difficulty);
     }
 
     /**

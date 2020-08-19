@@ -1,9 +1,10 @@
 import BN from 'bn.js';
 
 import { BaseBlock, BaseBlockHeader } from './base-block';
-import { MicroBlockInfo } from 'typings';
+import { CircularArray } from '../circular-array';
+import { Transaction } from '../transaction';
 
-export class MicroBlockHeader extends BaseBlockHeader {
+export class TxBlockHeader extends BaseBlockHeader {
     gasLimit: BN;
     gasUsed: BN;
     rewards: BN;
@@ -37,16 +38,28 @@ export class MicroBlockHeader extends BaseBlockHeader {
 }
 
 export class TxBlock extends BaseBlock {
-    microBlockInfo: MicroBlockInfo;
+    transactions = new CircularArray<Transaction>();
 
     constructor(
         timestamp: number,
         difficulty: number,
-        txBlockHeader: MicroBlockHeader,
-        microBlockInfo: MicroBlockInfo
+        txBlockInfo: TxBlockHeader
     ) {
-        super(timestamp, difficulty, txBlockHeader);
+        super(timestamp, difficulty, txBlockInfo);
+    }
 
-        this.microBlockInfo = microBlockInfo;
+    serialize(): string {
+        const header = this.getHeader() as TxBlockHeader;
+
+        return JSON.stringify({
+            timestamp: this.timestamp,
+            difficulty: this.difficulty,
+            gasLimit: header.gasLimit,
+            rewards: header.rewards,
+            minerPubKey: header.minerPubKey,
+            numTxs: header.numTxs,
+            dsBlockNum: header.dsBlockNum,
+            transactions: this.transactions.list
+        });
     }
 }
