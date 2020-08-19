@@ -1,4 +1,5 @@
-import { DSBlock, BaseBlock } from '../common/block';
+import { BaseBlock } from '../common/block';
+import chalk from 'chalk';
 
 export class PowSolution {
     constructor() {}
@@ -14,13 +15,20 @@ export class PowSolution {
      *
      * @returns {Promise} A promise for the mined block.
      */
-    mineDSBlock(block: DSBlock): Promise<BaseBlock> {
+    mineDSBlock(block: BaseBlock): Promise<BaseBlock> {
         const minedBlock = block;
 
         return new Promise((resolve) => {
             (function loop() {
                 if (minedBlock.isValid()) {
                     resolve(minedBlock);
+
+                    console.info(
+                        `${chalk.bold.greenBright(block.constructor.name)} 
+                        ${chalk.cyan('block-number', block.blockHeader.blockNum)} 
+                        ${chalk.cyan('hash', block.blockHash)} 
+                        ${chalk.cyan('Timestamp', new Date(block.timestamp).toISOString())}`
+                    );
                 } else {
                     minedBlock.incrementBlockNumber();
                     minedBlock.calculateHash();

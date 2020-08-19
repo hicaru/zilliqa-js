@@ -34,8 +34,8 @@ export class BaseBlockHeader {
 
 export class BaseBlock {
     public blockHash!: string;
-    protected timestamp!: number;
-    protected difficulty: number;
+    public timestamp!: number;
+    public difficulty!: number;
 
     blockHeader!: BaseBlockHeader;
 

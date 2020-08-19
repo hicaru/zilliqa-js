@@ -64,8 +64,6 @@ export class BlockChain {
 
             this.blocks.add(minedBlock, minedBlock.getHeader().blockNum);
 
-            console.debug(minedBlock)
-
             const lastBlock = this._getLastBlock();
             const header = new DSBlockHeader(
                 this.version,
