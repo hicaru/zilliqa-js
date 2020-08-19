@@ -2,8 +2,6 @@ import { BaseBlock } from '../common/block';
 import chalk from 'chalk';
 
 export class PowSolution {
-    constructor() {}
-
     /**
      * Mines a block.
      *
