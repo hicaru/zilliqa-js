@@ -1,7 +1,7 @@
 import BN from 'bn.js';
 
 import { BaseBlock, BaseBlockHeader } from './base-block';
-import { MicroBlockInfo } from 'types';
+import { MicroBlockInfo } from 'typings';
 
 export class MicroBlockHeader extends BaseBlockHeader {
     gasLimit: BN;

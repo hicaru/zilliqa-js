@@ -1,25 +1,26 @@
 {
-  "compilerOptions": {
-      "target": "es5",
-      "module": "commonjs",
-      "sourceMap": true,
-      "outDir": "./dist",
-      "rootDir": ".",
-      /* Strict Type-Checking Options */
-      "strict": true,
-      "noImplicitAny": true,
-      /* Module Resolution Options */
-      "moduleResolution": "node",
-      "baseUrl": ".",
-      "esModuleInterop": true,
-      /* Advanced Options */
-      "skipLibCheck": true,
-      "forceConsistentCasingInFileNames": true
-  },
-  "lib": ["es2015"],
-  "exclude": ["dist", "node_modules"],
-  "include": [
-    "src",
-    "src/**/*.ts"
-  ]
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "sourceMap": true,
+        "outDir": "./dist",
+        "rootDir": ".",
+        /* Strict Type-Checking Options */
+        "strict": true,
+        "noImplicitAny": true,
+        /* Module Resolution Options */
+        "moduleResolution": "node",
+        "baseUrl": ".",
+        "esModuleInterop": true,
+        /* Advanced Options */
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "typeRoots" : ["./node_modules/@types", "./typings"]
+    },
+    "lib": ["es2015"],
+    "exclude": ["dist", "node_modules"],
+    "include": [
+        "src",
+        "src/**/*.ts"
+    ]
 }

@@ -1,6 +1,4 @@
-import BN from 'bn.js';
-
-import { DSBlock, BaseBlock } from 'src/common/block';
+import { DSBlock, BaseBlock } from '../common/block';
 
 export class PowSolution {
     constructor() {}

@@ -1,4 +1,6 @@
+
 import BN from 'bn.js';
+import schnorr from 'bip-schnorr';
 import { SHA256 } from 'crypto-js';
 
 export class Transaction {
@@ -7,31 +9,33 @@ export class Transaction {
     amount: BN;
     gasPrice: BN;
     gasLimit: BN;
+    priority: boolean;
     code: string;
     data: string;
     toAddr: string;
-    senderKeyPair: {
-        first: string;
-        second: string;
-    };
+    pubKey: string;
     signature: string;
+
+    get message() {
+        return JSON.stringify({
+            amount: String(this.amount),
+            code: this.code,
+            data: this.data,
+            gasLimit: String(this.gasLimit),
+            gasPrice: String(this.gasPrice),
+            nonce: String(this.nonce),
+            priority: this.priority,
+            pubKey: String(this.pubKey),
+            toAddr: String(this.toAddr).toLowerCase(),
+            version: String(this.version)
+        });
+    }
 
     /**
      * Creates a SHA256 hash of the transaction
      */
     get hash() {
-        const payload =
-            String(this.version) +
-            String(this.nonce) + 
-            String(this.toAddr) +
-            String(this.senderKeyPair.second) +
-            String(this.amount) +
-            String(this.gasPrice) +
-            String(this.gasLimit) +
-            String(this.code) +
-            String(this.data);
-
-        return SHA256(payload).toString();
+        return SHA256(this.message).toString();
     }
 
     constructor(
@@ -43,11 +47,9 @@ export class Transaction {
         code: string,
         data: string,
         toAddr: string,
-        senderKeyPair: {
-            first: string;
-            second: string;
-        },
-        signature: string
+        pubKey: string,
+        signature: string,
+        priority = false
     ) {
         this.version = version;
         this.nonce = nonce;
@@ -57,9 +59,29 @@ export class Transaction {
         this.code = code;
         this.data = data;
         this.toAddr = toAddr;
-        this.senderKeyPair = senderKeyPair;
+        this.pubKey = pubKey;
         this.signature = signature;
+        this.priority = priority;
+    }
+
+    /**
+     * Checks if the signature is valid (transaction has not been tampered with).
+     * It uses the fromAddress as the public key.
+     *
+     * @returns {boolean}
+     */
+    public isValid(): boolean {
+        const hash = this.hash;
+        const publicKey = Buffer.from(this.pubKey, 'hex');
+        const signatureToVerify = Buffer.from(this.signature, 'hex');
+
+        try {
+            schnorr.verify(publicKey, this.message, signatureToVerify);
+        } catch {
+            return false;
+        }
+
+        return false;
     }
 
 }
-  

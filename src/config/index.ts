@@ -3,9 +3,9 @@ import { DSBlock, DSBlockHeader } from '../common';
 import { SWInfo } from '../common/sw-info';
 
 export enum GasLimits {
-    ds = '100 000 000',
-    tx = '100 000',
-    m = '100'
+    DS = '100 000 000',
+    TX = '100 000',
+    M = '100'
 }
 
 export const VERSION = new BN(1);
