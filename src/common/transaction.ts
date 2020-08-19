@@ -71,17 +71,14 @@ export class Transaction {
      * @returns {boolean}
      */
     public isValid(): boolean {
-        const hash = this.hash;
         const publicKey = Buffer.from(this.pubKey, 'hex');
         const signatureToVerify = Buffer.from(this.signature, 'hex');
 
         try {
-            schnorr.verify(publicKey, this.message, signatureToVerify);
+            return schnorr.verify(publicKey, this.message, signatureToVerify);
         } catch {
             return false;
         }
-
-        return false;
     }
 
 }
