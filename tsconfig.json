@@ -15,12 +15,18 @@
         /* Advanced Options */
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
-        "typeRoots" : ["./node_modules/@types", "./typings"]
+        "typeRoots" : ["./node_modules/@types", "./typings"],
+        "paths": {
+            "*": [
+                "node_modules/*",
+                "typings/*"
+            ]
+        }
     },
     "lib": ["es2015"],
     "exclude": ["dist", "node_modules"],
     "include": [
         "src",
-        "src/**/*.ts"
+        "src/**/*"
     ]
 }
