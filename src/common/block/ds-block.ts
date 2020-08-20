@@ -5,8 +5,6 @@ import { validator } from '../../crypto';
 import { CircularArray } from '../circular-array';
 
 export class DSBlockHeader extends BaseBlockHeader {
-    txBlocks = new CircularArray<TxBlock>();
-
     dsDifficulty: number;
     difficulty: number;
     leaderPubKey: string;
@@ -31,6 +29,8 @@ export class DSBlockHeader extends BaseBlockHeader {
 }
 
 export class DSBlock extends BaseBlock {
+    public txBlocks = new CircularArray<TxBlock>();
+
     constructor(
         timestamp: number,
         difficulty: number,
@@ -50,7 +50,7 @@ export class DSBlock extends BaseBlock {
             dsDifficulty: header.dsDifficulty,
             leaderPubKey: header.leaderPubKey,
             gasPrice: header.gasPrice,
-            txBlocks: header.txBlocks.list
+            txBlocks: this.txBlocks.list
         });
     }
 
@@ -64,6 +64,16 @@ export class DSBlock extends BaseBlock {
         }
 
         const header = this.getHeader() as DSBlockHeader;
+        const blocks = Object.keys(this.txBlocks.list);
+
+        for (let index = 0; index < blocks.length; index++) {
+            const key = Number(blocks[index]);
+            const txBlock = this.txBlocks.list[key];
+
+            if (!txBlock.isValid()) {
+                return false;
+            }
+        }
 
         return validator(this.blockHash, header.dsDifficulty);
     }

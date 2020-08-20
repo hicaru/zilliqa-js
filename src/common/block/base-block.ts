@@ -24,12 +24,6 @@ export class BaseBlockHeader {
     public serialize() {
         return JSON.stringify(this);
     }
-
-    public incrementBlockNumber() {
-        this.blockNum++;
-
-        return this.blockNum;
-    }
 }
 
 export class BaseBlock {
@@ -51,10 +45,6 @@ export class BaseBlock {
 
     protected _updateHash() {
         this.blockHash = this.calculateHash();
-    }
-
-    public incrementBlockNumber() {
-        return this.blockHeader.incrementBlockNumber();
     }
 
     /**

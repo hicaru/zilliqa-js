@@ -32,7 +32,7 @@ export class CircularArray<T> {
         return lastNumber;
     }
 
-    getLast(): T {
+    getLast(): T | undefined {
         const lastNumber = this.getLastnumber()
 
         return this.items[lastNumber];

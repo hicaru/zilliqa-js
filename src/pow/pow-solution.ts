@@ -13,8 +13,12 @@ export class PowSolution {
      *
      * @returns {Promise} A promise for the mined block.
      */
-    mineDSBlock(block: BaseBlock): Promise<BaseBlock> {
+    mineBlock<T extends BaseBlock>(block: T): Promise<T> {
         const minedBlock = block;
+
+        if (!(block instanceof BaseBlock)) {
+            throw new Error()
+        }
 
         return new Promise((resolve) => {
             (function loop() {
@@ -28,8 +32,7 @@ export class PowSolution {
                         ${chalk.cyan('Timestamp', new Date(block.timestamp).toISOString())}`
                     );
                 } else {
-                    minedBlock.incrementBlockNumber();
-                    minedBlock.calculateHash();
+                    minedBlock.blockHash = minedBlock.calculateHash();
                     // Give Node.js the chance to clear the stack.
                     setImmediate(loop);
                 }

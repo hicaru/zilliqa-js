@@ -3,35 +3,24 @@ import BN from 'bn.js';
 import { BaseBlock, BaseBlockHeader } from './base-block';
 import { CircularArray } from '../circular-array';
 import { Transaction } from '../transaction';
+import { validator } from '../../crypto';
 
 export class TxBlockHeader extends BaseBlockHeader {
     gasLimit: BN;
-    gasUsed: BN;
-    rewards: BN;
-    hashset: string[];
-    numTxs: number;
     minerPubKey: string;
     dsBlockNum: number;
 
     constructor(
         version: BN,
-        committeeHash: string,
         gasLimit: BN,
-        gasUsed: BN,
-        rewards: BN,
         blockNum: number,
-        hashset: string[],
-        numTxs: number,
+        prevHash: string,
         minerPubKey: string,
         dsBlockNum: number
     ) {
-        super(version, committeeHash, blockNum);
+        super(version, prevHash, blockNum);
 
         this.gasLimit = gasLimit;
-        this.gasUsed = gasUsed;
-        this.rewards = rewards;
-        this.hashset = hashset;
-        this.numTxs = numTxs;
         this.minerPubKey = minerPubKey;
         this.dsBlockNum = dsBlockNum;
     }
@@ -46,6 +35,8 @@ export class TxBlock extends BaseBlock {
         txBlockInfo: TxBlockHeader
     ) {
         super(timestamp, difficulty, txBlockInfo);
+
+        this._updateHash();
     }
 
     serialize(): string {
@@ -55,11 +46,34 @@ export class TxBlock extends BaseBlock {
             timestamp: this.timestamp,
             difficulty: this.difficulty,
             gasLimit: header.gasLimit,
-            rewards: header.rewards,
+            // rewards: header.rewards,
             minerPubKey: header.minerPubKey,
-            numTxs: header.numTxs,
+            numTxs: this.transactions.size(),
             dsBlockNum: header.dsBlockNum,
             transactions: this.transactions.list
         });
+    }
+
+        /**
+     * Starts the mining process on the block. It changes the 'nonce' until the hash
+     * of the block starts with enough zeros (= difficulty)
+     */
+    isValid(): boolean {
+        if (this.blockHash !== this.calculateHash()) {
+            return false;
+        }
+
+        const blocks = Object.keys(this.transactions.list);
+
+        for (let index = 0; index < blocks.length; index++) {
+            const key = Number(blocks[index]);
+            const tx = this.transactions.list[key];
+
+            if (!tx.isValid()) {
+                return false;
+            }
+        }
+
+        return validator(this.blockHash, this.difficulty);
     }
 }
