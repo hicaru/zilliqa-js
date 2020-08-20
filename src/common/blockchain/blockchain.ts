@@ -68,7 +68,7 @@ export class BlockChain {
         const minedBlock = await this.pow.mineBlock<DSBlock>(newBlock);
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
-        this.txBlocks.reset();
+        // this.txBlocks.reset();
     }
 
     public getBlock(blockNum: number) {
@@ -96,7 +96,7 @@ export class BlockChain {
 
             this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
 
-            if (this.txBlocks.size() >= 1000) {
+            if (this.txBlocks.size() >= 100) {
                 await this._createDSBlock();
             }
 

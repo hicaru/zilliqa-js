@@ -1,6 +1,10 @@
 import { BlockChain } from './common';
-// import { PowSolution } from 'src/pow';
+import App from './server';
+import { PORT } from './config';
 
 export function main() {
-    new BlockChain();
+    // new BlockChain();
+    App.listen(PORT, () => {
+        console.log(`⚡️[server]: Server is running at https://localhost:${PORT}`);
+    });
 }
