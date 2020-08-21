@@ -2,27 +2,22 @@ import BN from 'bn.js';
 import chalk from 'chalk';
 
 import { CircularArray } from '../circular-array';
-import { BaseBlock, DSBlock, DSBlockHeader } from '../block';
+import { DSBlock, DSBlockHeader } from '../block';
 import { PowSolution } from '../../pow';
-import {
-    GENESIS_TX_BLOCK,
-    DIFFICULTY,
-    VERSION,
-    DS_DIFFICULTY,
-    MINER_PUBKEY,
-    GENESIS_BLOCK_NUMBER,
-    DEFAULT_GAS_PRICE,
-    GasLimits,
-    ZERO_HASH
-} from '../../config';
+import { GasLimits } from '../../config';
 import { TxBlock, TxBlockHeader } from '../block/tx-block';
 
 export class BlockChain {
     dsBlocks = new CircularArray<DSBlock>();
     txBlocks = new CircularArray<TxBlock>();
     pow = new PowSolution();
+    genesisTxBlock: TxBlock;
     difficulty: number;
     dsDifficulty: number;
+    genesisBlockNumber: number;
+    zeroHash: string;
+    defaultMiner: string;
+    defaultGasPrice: BN;
     version: BN;
 
     get getBlockCount() {
@@ -33,13 +28,27 @@ export class BlockChain {
         return this.dsBlocks.getLast();
     }
 
-    constructor() {
-        this.difficulty = DIFFICULTY;
-        this.dsDifficulty = DS_DIFFICULTY;
-        this.version = VERSION;
+    constructor(
+        difficulty: number,
+        dsDifficulty: number,
+        version: BN,
+        genesisTxBlock: TxBlock,
+        genesisBlockNumber: number,
+        zeroHash: string,
+        defaultMiner: string,
+        defaultGasPrice: BN,
+    ) {
+        this.difficulty = difficulty;
+        this.dsDifficulty = dsDifficulty;
+        this.version = version;
+        this.zeroHash = zeroHash;
+        this.genesisBlockNumber = genesisBlockNumber;
+        this.defaultMiner = defaultMiner;
+        this.defaultGasPrice = defaultGasPrice;
+        this.genesisTxBlock = genesisTxBlock;
 
         if (this.dsBlocks.size() === 0) {
-            this.addBlock(GENESIS_TX_BLOCK);
+            this.addBlock(this.genesisTxBlock);
         }
     }
 
@@ -49,16 +58,16 @@ export class BlockChain {
 
     private async _createDSBlock() {
         const lastBlock = this._getLastBlock();
-        const lastBlockHash = !lastBlock ? ZERO_HASH : lastBlock.blockHash;
-        const lastBlockNumber = !lastBlock ? GENESIS_BLOCK_NUMBER : lastBlock.getHeader().getBlockNum();
+        const lastBlockHash = !lastBlock ? this.zeroHash : lastBlock.blockHash;
+        const lastBlockNumber = !lastBlock ? this.genesisBlockNumber : lastBlock.getHeader().getBlockNum();
         const header = new DSBlockHeader(
             this.version,
             lastBlockHash,
             this.dsDifficulty,
             this.difficulty,
-            MINER_PUBKEY,
+            this.defaultMiner,
             lastBlockNumber + 1,
-            DEFAULT_GAS_PRICE
+            this.defaultGasPrice
         );
         const timestamp = new Date().valueOf();
         const newBlock = new DSBlock(timestamp, this.dsDifficulty, header);
@@ -101,18 +110,18 @@ export class BlockChain {
             }
 
             const lastBlock = this._getLastBlock();
-            const lastBlockNumber = !lastBlock ? GENESIS_BLOCK_NUMBER : lastBlock.getHeader().getBlockNum();
+            const lastBlockNumber = !lastBlock ? this.genesisBlockNumber : lastBlock.getHeader().getBlockNum();
             const newTxHeader = new TxBlockHeader(
-                VERSION,
+                this.version,
                 new BN(GasLimits.TX),
                 minedBlock.getHeader().blockNum + 1,
                 minedBlock.blockHash,
-                MINER_PUBKEY,
+                this.defaultMiner,
                 lastBlockNumber
             );
             const newTxBlock = new TxBlock(
                 new Date().valueOf(),
-                DIFFICULTY,
+                this.difficulty,
                 newTxHeader
             );
 
