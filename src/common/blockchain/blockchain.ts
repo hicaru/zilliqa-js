@@ -15,6 +15,7 @@ export class BlockChain {
     difficulty: number;
     dsDifficulty: number;
     genesisBlockNumber: number;
+    chainId: BN;
     zeroHash: string;
     defaultMiner: string;
     defaultGasPrice: BN;
@@ -37,6 +38,7 @@ export class BlockChain {
         zeroHash: string,
         defaultMiner: string,
         defaultGasPrice: BN,
+        chainId: BN
     ) {
         this.difficulty = difficulty;
         this.dsDifficulty = dsDifficulty;
@@ -46,6 +48,7 @@ export class BlockChain {
         this.defaultMiner = defaultMiner;
         this.defaultGasPrice = defaultGasPrice;
         this.genesisTxBlock = genesisTxBlock;
+        this.chainId = chainId;
 
         if (this.dsBlocks.size() === 0) {
             this.addBlock(this.genesisTxBlock);

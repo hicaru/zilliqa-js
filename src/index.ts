@@ -7,6 +7,7 @@ import {
     GENESIS_BLOCK_NUMBER,
     ZERO_HASH,
     MINER_PUBKEY,
+    CHAIN_ID,
     DEFAULT_GAS_PRICE
 } from './config';
 import App from './server';
@@ -20,7 +21,8 @@ export function main() {
         GENESIS_BLOCK_NUMBER,
         ZERO_HASH,
         MINER_PUBKEY,
-        DEFAULT_GAS_PRICE
+        DEFAULT_GAS_PRICE,
+        CHAIN_ID
     );
     
     // Starting jsonRPC server.

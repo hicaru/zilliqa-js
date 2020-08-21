@@ -9,6 +9,7 @@ export enum GasLimits {
 }
 
 export const VERSION = new BN(1);
+export const CHAIN_ID = new BN(334);
 export const ZERO_HASH = '0000000000000000000000000000000000000000000000000000000000000000';
 export const DIFFICULTY = 53453;
 export const DS_DIFFICULTY = 4236897;
