@@ -25,8 +25,8 @@ export class BlockChain {
         return this.dsBlocks.size();
     }
 
-    get getLastBlock() {
-        return this.dsBlocks.getLast();
+    get getLastDSBlock() {
+        return this.dsBlocks.getLast();;
     }
 
     constructor(
@@ -55,12 +55,8 @@ export class BlockChain {
         }
     }
 
-    private _getLastBlock() {
-        return this.dsBlocks.getLast();
-    }
-
     private async _createDSBlock() {
-        const lastBlock = this._getLastBlock();
+        const lastBlock = this.getLastDSBlock;
         const lastBlockHash = !lastBlock ? this.zeroHash : lastBlock.blockHash;
         const lastBlockNumber = !lastBlock ? this.genesisBlockNumber : lastBlock.getHeader().getBlockNum();
         const header = new DSBlockHeader(
@@ -84,11 +80,12 @@ export class BlockChain {
     }
 
     public getBlock(blockNum: number) {
-        const lastBlock = this.getLastBlock;
+        const lastBlock = this.getLastDSBlock;
 
         if (!lastBlock) {
             return null;
         }
+
         const blockNumber = lastBlock.getHeader().getBlockNum();
 
         if (this.getBlockCount > 0 && blockNumber < blockNum) {
@@ -112,7 +109,7 @@ export class BlockChain {
                 await this._createDSBlock();
             }
 
-            const lastBlock = this._getLastBlock();
+            const lastBlock = this.getLastDSBlock;
             const lastBlockNumber = !lastBlock ? this.genesisBlockNumber : lastBlock.getHeader().getBlockNum();
             const newTxHeader = new TxBlockHeader(
                 this.version,

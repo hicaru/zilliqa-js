@@ -5,9 +5,10 @@ import { RPCErrorCode } from '../errors';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const lastDSBlock = chain.getLastBlock;
+    const [id] = body.params;
+    const dsBlock = chain.getBlock(Number(id));
 
-    if (!lastDSBlock) {
+    if (!id || !dsBlock) {
         return res.json({
             code: RPCErrorCode.RPC_INTERNAL_ERROR
         });
@@ -18,16 +19,16 @@ export default function(req: Request, res: Response) {
         jsonrpc: body.jsonrpc,
         result: {
             header: {
-                BlockNum: String(lastDSBlock.blockHeader.blockNum),
+                BlockNum: String(dsBlock.blockHeader.blockNum),
                 Difficulty: chain.difficulty,
                 DifficultyDS: chain.dsDifficulty,
                 GasPrice: String(chain.defaultGasPrice),
                 LeaderPubKey: String(chain.defaultMiner),
                 PoWWinners: [],
-                PrevHash: String(lastDSBlock.blockHeader.prevHash),
-                Timestamp: String(lastDSBlock.timestamp)
+                PrevHash: String(dsBlock.blockHeader.prevHash),
+                Timestamp: String(dsBlock.timestamp)
               },
-              signature: lastDSBlock.blockHash
+              signature: dsBlock.blockHash
         }
     });
 };

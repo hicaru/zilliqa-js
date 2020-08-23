@@ -7,7 +7,7 @@ export enum Methods {
     GET_DS_BLOCK_RATE = 'GetDSBlockRate',
     DS_BLOCK_LISTING = 'DSBlockListing',
     GET_TX_BLOCK = 'GetTxBlock',
-    GETLATESTTXBLOCK = 'GetLatestTxBlock',
+    GET_LATEST_TX_BLOCK = 'GetLatestTxBlock',
     GET_NUM_TX_BLOCKS = 'GetNumTxBlocks',
     GET_TX_BLOCK_RATE = 'GetTxBlockRate',
     TX_BLOCK_LISTING = 'TxBlockListing',

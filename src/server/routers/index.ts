@@ -6,6 +6,7 @@ import { Methods } from '../methods';
 import GetNetworkId from './get-network-id';
 import GetBlockchainInfo from './get-blockchain-info';
 import GetDsBlock from './get-ds-block';
+import GetLatestDsBlock from './get-latest-ds-block';
 
 const router = express();
 
@@ -19,6 +20,8 @@ function jsonRPC(req: Request, res: Response) {
             return GetBlockchainInfo(req, res);
         case Methods.GET_DS_BLOCK:
             return GetDsBlock(req, res);
+        case Methods.GET_LATEST_DS_BLOCK:
+            return GetLatestDsBlock(req, res);
     }
 }
 
