@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { BlockChain } from '../../common';
-import { RPCErrorCode } from '../errors';
-import { ZERO_HASH } from '../../config';
+import { BlockChain } from '../../../common';
+import { RPCErrorCode } from '../../errors';
+import { ZERO_HASH } from '../../../config';
 
 export default function(req: Request, res: Response) {
     const { body } = req;
