@@ -16,6 +16,7 @@ import GetNumTxBlocks from './get-num-tx-blocks';
 import GetTxBlockRate from './get-tx-block-rate';
 import TxBlockListing from './tx-block-listing';
 import GetNumTransactions from './get-num-transactions';
+import GetTransactionRate from './get-transaction-rate';
 
 const router = express();
 
@@ -49,6 +50,8 @@ function jsonRPC(req: Request, res: Response) {
             return TxBlockListing(req, res);
         case Methods.GET_NUM_TRANSACTIONS:
             return GetNumTransactions(req, res);
+        case Methods.GET_TRANSACTION_RATE:
+            return GetTransactionRate(req, res);
     }
 }
 
