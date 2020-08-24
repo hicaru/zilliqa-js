@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import { SHA256 } from 'crypto-js';
 
 import { BaseBlock, BaseBlockHeader } from './base-block';
 import { CircularArray } from '../circular-array';
@@ -24,6 +25,10 @@ export class TxBlockHeader extends BaseBlockHeader {
         this.minerPubKey = minerPubKey;
         this.dsBlockNum = dsBlockNum;
     }
+
+    headerSign() {
+        return SHA256(JSON.stringify(this)).toString();
+    }
 }
 
 export class TxBlock extends BaseBlock {
@@ -37,6 +42,24 @@ export class TxBlock extends BaseBlock {
         super(timestamp, difficulty, txBlockInfo);
 
         this._updateHash();
+    }
+
+    /**
+     * Returns the header of the block.
+     *
+     * The header is used to calculate the hash of the block, and includes the
+     * following fields:
+     *
+     *  - hash of the previous block
+     *  - hash of the data
+     *  - difficulty
+     *  - timestamp
+     *
+     * That means that any change on the above fields will produce a different
+     * header, and thus a different hash.
+     */
+    getHeader(): TxBlockHeader {
+        return this.blockHeader as TxBlockHeader;
     }
 
     serialize(): string {

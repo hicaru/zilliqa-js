@@ -21,12 +21,20 @@ export class BlockChain {
     defaultGasPrice: BN;
     version: BN;
 
-    get getBlockCount() {
+    get getDSBlockCount() {
         return this.dsBlocks.size();
+    }
+
+    get getTXBlockCount() {
+        return this.txBlocks.size();
     }
 
     get getLastDSBlock() {
         return this.dsBlocks.getLast();;
+    }
+
+    get getLastTXBlock() {
+        return this.txBlocks.getLast();;
     }
 
     constructor(
@@ -79,7 +87,7 @@ export class BlockChain {
         // this.txBlocks.reset();
     }
 
-    public getBlock(blockNum: number) {
+    public getDSBlock(blockNum: number) {
         const lastBlock = this.getLastDSBlock;
 
         if (!lastBlock) {
@@ -88,12 +96,32 @@ export class BlockChain {
 
         const blockNumber = lastBlock.getHeader().getBlockNum();
 
-        if (this.getBlockCount > 0 && blockNumber < blockNum) {
+        if (this.getDSBlockCount > 0 && blockNumber < blockNum) {
             console.warn(`BlockNum too high ${blockNum} Dummy block used`);
         } else if (!this.dsBlocks.has(blockNum)) {
             // Get from store...
         } else {
             return this.dsBlocks.get(blockNum);
+        }
+
+        return null;
+    }
+
+    public getTXBlock(blockNum: number) {
+        const lastBlock = this.getLastTXBlock;
+
+        if (!lastBlock) {
+            return null;
+        }
+
+        const blockNumber = lastBlock.getHeader().getBlockNum();
+
+        if (this.getTXBlockCount > 0 && blockNumber < blockNum) {
+            console.warn(`BlockNum too high ${blockNum} Dummy block used`);
+        } else if (!this.txBlocks.has(blockNum)) {
+            // Get from store...
+        } else {
+            return this.txBlocks.get(blockNum);
         }
 
         return null;

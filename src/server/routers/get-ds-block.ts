@@ -6,7 +6,7 @@ export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
     const [id] = body.params;
-    const dsBlock = chain.getBlock(Number(id));
+    const dsBlock = chain.getDSBlock(Number(id));
 
     if (!id || !dsBlock) {
         return res.json({
