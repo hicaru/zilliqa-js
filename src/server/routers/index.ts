@@ -11,6 +11,7 @@ import GetNumDSBlocks from './get-num-ds-blocks';
 import GetDSBlockRate from './get-ds-block-rate';
 import DSBlockListing from './ds-block-listing';
 import GetTxBlock from './get-tx-block';
+import GetLatestTxBlock from './get-latest-tx-block';
 
 const router = express();
 
@@ -34,6 +35,8 @@ function jsonRPC(req: Request, res: Response) {
             return DSBlockListing(req, res);
         case Methods.GET_TX_BLOCK:
             return GetTxBlock(req, res);
+        case Methods.GET_LATEST_TX_BLOCK:
+            return GetLatestTxBlock(req, res);
     }
 }
 
