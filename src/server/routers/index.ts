@@ -18,6 +18,7 @@ import TxBlockListing from './tx-block-listing';
 import GetNumTransactions from './get-num-transactions';
 import GetTransactionRate from './get-transaction-rate';
 import GetCurrentMiniEpoch from './get-current-mini-epoch';
+import GetCurrentDSEpoch from './get-current-ds-epoch';
 
 const router = express();
 
@@ -55,6 +56,8 @@ function jsonRPC(req: Request, res: Response) {
             return GetTransactionRate(req, res);
         case Methods.GET_CURRENT_MINI_EPOCH:
             return GetCurrentMiniEpoch(req, res);
+        case Methods.GET_CURRENT_DS_EPOCH:
+            return GetCurrentDSEpoch(req, res);
     }
 }
 
