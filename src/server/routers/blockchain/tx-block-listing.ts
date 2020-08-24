@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BlockChain } from '../../../common';
-import { RPCErrorCode } from '../../errors';
+import { internalError, invalidParams } from '../../errors';
 import { paginate } from '../../../utils';
 
 export default function(req: Request, res: Response) {
@@ -10,27 +10,11 @@ export default function(req: Request, res: Response) {
     let { params } = body;
 
     if (!lastTXBlock) {
-        return res.json({
-            id: body.id,
-            jsonrpc: body.jsonrpc,
-            error: {
-                data: null,
-                code: RPCErrorCode.RPC_INTERNAL_ERROR,
-                message: 'INTERNAL_ERROR: no found rootTxBlock or txBlock.'
-            }
-        });
+        return res.json(internalError(body.id, body.jsonrpc, 'no found lastTXBlock.'));
     }
 
     if (!params[0]) {
-        return res.json({
-            id: body.id,
-            jsonrpc: body.jsonrpc,
-            error: {
-                data: null,
-                code: RPCErrorCode.RPC_INVALID_PARAMS,
-                message: 'INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised'
-            }
-        });
+        return res.json(invalidParams(body.id, body.jsonrpc));
     }
 
     const maxPages = lastTXBlock.transactions.size();
