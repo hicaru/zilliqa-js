@@ -8,9 +8,27 @@ export default function(req: Request, res: Response) {
     const [id] = body.params;
     const dsBlock = chain.getDSBlock(Number(id));
 
-    if (!id || !dsBlock) {
+    if (!id) {
         return res.json({
-            code: RPCErrorCode.RPC_INTERNAL_ERROR
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INVALID_PARAMS,
+                message: 'INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised'
+            }
+        });
+    }
+
+    if (!dsBlock) {
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INTERNAL_ERROR,
+                message: 'INTERNAL_ERROR: no found DsBlock.'
+            }
         });
     }
 

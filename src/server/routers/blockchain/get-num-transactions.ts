@@ -9,7 +9,13 @@ export default function(req: Request, res: Response) {
 
     if (!txBlock) {
         return res.json({
-            code: RPCErrorCode.RPC_INTERNAL_ERROR
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INTERNAL_ERROR,
+                message: 'INTERNAL_ERROR: no found txBlock.'
+            }
         });
     }
 

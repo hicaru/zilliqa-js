@@ -10,9 +10,27 @@ export default function(req: Request, res: Response) {
     const txBlock = chain.getTXBlock(Number(id));
     const rootTxBlock = chain.getTXBlock(0);
 
-    if (!id || !txBlock || !rootTxBlock) {
+    if (!txBlock || !rootTxBlock) {
         return res.json({
-            code: RPCErrorCode.RPC_INTERNAL_ERROR
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INTERNAL_ERROR,
+                message: 'INTERNAL_ERROR: no found txBlock or rootTxBlock.'
+            }
+        });
+    }
+
+    if (!id) {
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INVALID_PARAMS,
+                message: 'INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised'
+            }
         });
     }
 

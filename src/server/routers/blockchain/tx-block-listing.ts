@@ -11,12 +11,26 @@ export default function(req: Request, res: Response) {
 
     if (!lastTXBlock) {
         return res.json({
-            code: RPCErrorCode.RPC_INTERNAL_ERROR
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INTERNAL_ERROR,
+                message: 'INTERNAL_ERROR: no found rootTxBlock or txBlock.'
+            }
         });
     }
 
-    if (!params || !params[0]) {
-        params = [1];
+    if (!params[0]) {
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INVALID_PARAMS,
+                message: 'INVALID_PARAMS: Invalid method parameters (invalid name and/or type) recognised'
+            }
+        });
     }
 
     const maxPages = lastTXBlock.transactions.size();
