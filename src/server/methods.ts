@@ -29,5 +29,12 @@ export enum Methods {
     GET_TXN_BODIES_FOR_TX_BLOCK = 'GetTxnBodiesForTxBlock',
     GET_NUM_TXNS_TX_EPOCH = 'GetNumTxnsTxEpoch',
     GET_NUM_TXNS_DS_EPOCH = 'GetNumTxnsDSEpoch',
-    GET_MINIMUM_GAS_PRICE = 'GetMinimumGasPrice'
+    GET_MINIMUM_GAS_PRICE = 'GetMinimumGasPrice',
+
+    GET_SMART_CONTRACT_CODE = 'GetSmartContractCode',
+    GET_SMART_CONTRACT_INIT = 'GetSmartContractInit',
+    GET_SMART_CONTRACT_SUB_STATE = 'GetSmartContractSubState',
+    GET_SMART_CONTRACT_STATE = 'GetSmartContractState',
+    GET_SMART_CONTRACTS = 'GetSmartContracts',
+    GET_CONTRACT_ADDRESS_FROM_TRANSACTION_ID = 'GetContractAddressFromTransactionID'
 }

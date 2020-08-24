@@ -23,3 +23,15 @@ export function internalError(id: string = '1', jsonrpc: string = '2.0', msg: st
         }
     }
 }
+
+export function notSupport(id: string = '1', jsonrpc: string = '2.0', msg: string, data = null) {
+    return {
+        id,
+        jsonrpc,
+        error: {
+            data,
+            code: RPCErrorCode.CURRENT_VERSION_IS_NOT_SUPPORT,
+            message: 'CURRENT_VERSION_IS_NOT_SUPPORT: ' + msg
+        }
+    }
+}
