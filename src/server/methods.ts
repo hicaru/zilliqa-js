@@ -36,5 +36,7 @@ export enum Methods {
     GET_SMART_CONTRACT_SUB_STATE = 'GetSmartContractSubState',
     GET_SMART_CONTRACT_STATE = 'GetSmartContractState',
     GET_SMART_CONTRACTS = 'GetSmartContracts',
-    GET_CONTRACT_ADDRESS_FROM_TRANSACTION_ID = 'GetContractAddressFromTransactionID'
+    GET_CONTRACT_ADDRESS_FROM_TRANSACTION_ID = 'GetContractAddressFromTransactionID',
+
+    GET_BALANCE = 'GetBalance'
 }

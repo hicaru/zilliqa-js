@@ -18,7 +18,7 @@ export default {
     GetContractAddressFromTransactionID
 };
 
-export function transactionRoute(method: string, req: Request, res: Response) {
+export function contractRoute(method: string, req: Request, res: Response) {
     switch (method) {
 
         case Methods.GET_SMART_CONTRACT_CODE:
