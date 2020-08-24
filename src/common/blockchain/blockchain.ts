@@ -6,10 +6,13 @@ import { DSBlock, DSBlockHeader } from '../block';
 import { PowSolution } from '../../pow';
 import { GasLimits } from '../../config';
 import { TxBlock, TxBlockHeader } from '../block/tx-block';
+import { Transaction } from '../transaction';
 
 export class BlockChain {
     dsBlocks = new CircularArray<DSBlock>();
     txBlocks = new CircularArray<TxBlock>();
+    pendingTxns = new CircularArray<Transaction>();
+
     pow = new PowSolution();
     genesisTxBlock: TxBlock;
     difficulty: number;
