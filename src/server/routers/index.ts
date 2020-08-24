@@ -22,6 +22,7 @@ import GetCurrentDSEpoch from './get-current-ds-epoch';
 import GetPrevDifficulty from './get-prev-difficulty';
 import GetPrevDSDifficulty from './get-prev-ds-difficulty';
 import GetTotalCoinSupply from './get-total-coin-supply';
+import GetMinerInfo from './get-miner-info';
 
 const router = express();
 
@@ -67,6 +68,8 @@ function jsonRPC(req: Request, res: Response) {
             return GetPrevDSDifficulty(req, res);
         case Methods.GET_TOTAL_COIN_SUPPLY:
             return GetTotalCoinSupply(req, res);
+        case Methods.GET_MINER_INFO:
+            return GetMinerInfo(req, res);
     }
 }
 
