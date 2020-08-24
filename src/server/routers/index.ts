@@ -9,6 +9,7 @@ import GetDsBlock from './get-ds-block';
 import GetLatestDsBlock from './get-latest-ds-block';
 import GetNumDSBlocks from './get-num-ds-blocks';
 import GetDSBlockRate from './get-ds-block-rate';
+import DSBlockListing from './ds-block-listing';
 
 const router = express();
 
@@ -28,6 +29,8 @@ function jsonRPC(req: Request, res: Response) {
             return GetNumDSBlocks(req, res);
         case Methods.GET_DS_BLOCK_RATE:
             return GetDSBlockRate(req, res);
+        case Methods.DS_BLOCK_LISTING:
+            return DSBlockListing(req, res);
     }
 }
 
