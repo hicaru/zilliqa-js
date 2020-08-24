@@ -18,5 +18,16 @@ export enum Methods {
     GET_PREV_DIFFICULTY = 'GetPrevDifficulty',
     GET_PREV_DS_DIFFICULTY = 'GetPrevDSDifficulty',
     GET_TOTAL_COIN_SUPPLY = 'GetTotalCoinSupply',
-    GET_MINER_INFO = 'GetMinerInfo'
+    GET_MINER_INFO = 'GetMinerInfo',
+
+    CREATE_TRANSACTION = 'CreateTransaction',
+    GET_TRANSACTION = 'GetTransaction',
+    GET_PENDING_TXN = 'GetPendingTxn',
+    GET_PENDING_TXNS = 'GetPendingTxns',
+    GET_RECENT_TRANSACTIONS = 'GetRecentTransactions',
+    GET_TRANSACTIONS_FOR_TX_BLOCK = 'GetTransactionsForTxBlock',
+    GET_TXN_BODIES_FOR_TX_BLOCK = 'GetTxnBodiesForTxBlock',
+    GET_NUM_TXNS_TX_EPOCH = 'GetNumTxnsTxEpoch',
+    GET_NUM_TXNS_DS_EPOCH = 'GetNumTxnsDSEpoch',
+    GET_MINIMUM_GAS_PRICE = 'GetMinimumGasPrice'
 }
