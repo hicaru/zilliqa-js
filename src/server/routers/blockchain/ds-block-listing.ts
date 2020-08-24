@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
-import { BlockChain } from '../../common';
-import { RPCErrorCode } from '../errors';
-import { paginate } from '../../utils';
+import { BlockChain } from '../../../common';
+import { RPCErrorCode } from '../../errors';
+import { paginate } from '../../../utils';
 
 export default function(req: Request, res: Response) {
     const { body } = req;
