@@ -19,6 +19,7 @@ import GetNumTransactions from './get-num-transactions';
 import GetTransactionRate from './get-transaction-rate';
 import GetCurrentMiniEpoch from './get-current-mini-epoch';
 import GetCurrentDSEpoch from './get-current-ds-epoch';
+import GetPrevDifficulty from './get-prev-difficulty';
 
 const router = express();
 
@@ -58,6 +59,8 @@ function jsonRPC(req: Request, res: Response) {
             return GetCurrentMiniEpoch(req, res);
         case Methods.GET_CURRENT_DS_EPOCH:
             return GetCurrentDSEpoch(req, res);
+        case Methods.GET_PREV_DIFFICULTY:
+            return GetPrevDifficulty(req, res);
     }
 }
 
