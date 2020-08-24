@@ -21,6 +21,7 @@ import GetCurrentMiniEpoch from './get-current-mini-epoch';
 import GetCurrentDSEpoch from './get-current-ds-epoch';
 import GetPrevDifficulty from './get-prev-difficulty';
 import GetPrevDSDifficulty from './get-prev-ds-difficulty';
+import GetTotalCoinSupply from './get-total-coin-supply';
 
 const router = express();
 
@@ -64,6 +65,8 @@ function jsonRPC(req: Request, res: Response) {
             return GetPrevDifficulty(req, res);
         case Methods.GET_PREV_DS_DIFFICULTY:
             return GetPrevDSDifficulty(req, res);
+        case Methods.GET_TOTAL_COIN_SUPPLY:
+            return GetTotalCoinSupply(req, res);
     }
 }
 
