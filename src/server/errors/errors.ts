@@ -11,6 +11,10 @@ export enum RPCErrorCode {
     // (for example datadir corruption).
     RPC_INTERNAL_ERROR = -32603,
     RPC_PARSE_ERROR = -32700,
+    PROCEDURE_IS_METHOD = -32604,
+    JSON_PARSE_ERROR = -32700,
+
+    INVALID_JSON_REQUEST = -32600,
 
     //! General application defined errors
     RPC_MISC_ERROR = -1,  //!< std::exception thrown in command handling
@@ -25,5 +29,7 @@ export enum RPCErrorCode {
     RPC_VERIFY_REJECTED =
         -26,  //!< Transaction or block was rejected by network rules
     RPC_IN_WARMUP = -28,          //!< Client still warming up
-    RPC_METHOD_DEPRECATED = -32  //!< RPC method is deprecated
+    RPC_METHOD_DEPRECATED = -32,  //!< RPC method is deprecated,
+
+    CURRENT_VERSION_IS_NOT_SUPPORT = -66
 };

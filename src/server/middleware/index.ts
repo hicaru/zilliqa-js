@@ -7,19 +7,61 @@ export default function(req: Request, res: Response, next: NextFunction) {
 
     if (body && body.method && !Object.values(Methods).includes(body.method)) {
         return res.json({
-            code: RPCErrorCode.RPC_METHOD_NOT_FOUND
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                code: RPCErrorCode.RPC_METHOD_NOT_FOUND,
+                data: null,
+                message: 'RPC_METHOD_NOT_FOUND: The method being requested is not available on this server'
+            }
         });
     }
 
-    if (!body || !body.id || !body.jsonrpc || !body.method || !body.params) {
+    if (!body || !body.id) {
         return res.json({
-            code: RPCErrorCode.RPC_INVALID_PARAMS
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.PROCEDURE_IS_METHOD,
+                message: 'PROCEDURE_IS_METHOD: The requested notification is declared as a method'
+            }
+        });
+    }
+
+    if (!body && !body.params) {
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.JSON_PARSE_ERROR,
+                message: 'JSON_PARSE_ERROR: The JSON-Object is not JSON-Valid'
+            }
+        });
+    }
+
+    if (body && (!body.jsonrpc || !body.method)) {
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.INVALID_JSON_REQUEST,
+                message: 'INVALID_JSON_REQUEST: The JSON sent is not a valid JSON-RPC Request object'
+            }
         });
     }
 
     if (method !== 'POST' || !body) {
         return res.json({
-            code: RPCErrorCode.RPC_INVALID_REQUEST
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            error: {
+                data: null,
+                code: RPCErrorCode.RPC_INVALID_REQUEST,
+                message: ''
+            }
         });
     }
 
