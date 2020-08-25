@@ -11,8 +11,10 @@ import {
     DEFAULT_GAS_PRICE
 } from './config';
 import App from './server';
+import { MemmoryStorage } from './storage';
 
 export function main() {
+    const storage = new MemmoryStorage();
     const chain = new BlockChain(
         DIFFICULTY,
         DS_DIFFICULTY,
@@ -22,7 +24,8 @@ export function main() {
         ZERO_HASH,
         MINER_PUBKEY,
         DEFAULT_GAS_PRICE,
-        CHAIN_ID
+        CHAIN_ID,
+        storage
     );
     
     // Starting jsonRPC server.

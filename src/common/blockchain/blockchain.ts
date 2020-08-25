@@ -7,8 +7,11 @@ import { PowSolution } from '../../pow';
 import { GasLimits } from '../../config';
 import { TxBlock, TxBlockHeader } from '../block/tx-block';
 import { Transaction } from '../transaction';
+import { Storage } from '../../storage';
 
 export class BlockChain {
+    private _storage: Storage;
+
     dsBlocks = new CircularArray<DSBlock>();
     txBlocks = new CircularArray<TxBlock>();
     pendingTxns = new CircularArray<Transaction>();
@@ -49,7 +52,8 @@ export class BlockChain {
         zeroHash: string,
         defaultMiner: string,
         defaultGasPrice: BN,
-        chainId: BN
+        chainId: BN,
+        storage: Storage
     ) {
         this.difficulty = difficulty;
         this.dsDifficulty = dsDifficulty;
@@ -60,6 +64,8 @@ export class BlockChain {
         this.defaultGasPrice = defaultGasPrice;
         this.genesisTxBlock = genesisTxBlock;
         this.chainId = chainId;
+        
+        this._storage = storage;
 
         if (this.dsBlocks.size() === 0) {
             this.addBlock(this.genesisTxBlock);
