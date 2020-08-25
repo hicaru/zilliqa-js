@@ -1,7 +1,8 @@
-
 import BN from 'bn.js';
 import schnorr from 'bip-schnorr';
 import { SHA256 } from 'crypto-js';
+
+import { Account } from './account';
 
 export class Transaction {
     version: BN;
@@ -15,6 +16,7 @@ export class Transaction {
     toAddr: string;
     pubKey: string;
     signature: string;
+    account: Account;
 
     get message() {
         return JSON.stringify({
@@ -62,6 +64,8 @@ export class Transaction {
         this.pubKey = pubKey;
         this.signature = signature;
         this.priority = priority;
+
+        this.account = new Account(this.pubKey, 0, new BN(0));
     }
 
     /**

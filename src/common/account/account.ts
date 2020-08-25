@@ -1,19 +1,17 @@
 import BN from 'bn.js';
-import elliptic from 'elliptic';
+import { getAddressFromPublicKey } from '@zilliqa-js/crypto/dist/util';
 
 export class Account {
-    private _secp256k1 = new elliptic.ec('secp256k1');
-
     pubKey!: string;
-    nonce!: number;
+    nonce?: number;
 
-    balance: BN = new BN(0);
+    balance?: BN = new BN(0);
 
     get address() {
-        return this._secp256k1.keyFromPublic(this.pubKey);
+        return getAddressFromPublicKey(this.pubKey).replace('0x', '');
     }
 
-    constructor(pubKey: string, nonce: number, balance: BN) {
+    constructor(pubKey: string, nonce?: number, balance?: BN) {
         this.pubKey = pubKey;
         this.nonce = nonce;
         this.balance = balance;
