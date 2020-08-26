@@ -23,6 +23,7 @@ export class BlockChain {
     genesisBlockNumber: number;
     chainId: BN;
     zeroHash: string;
+    amountTxBlocksPearDSBlock: number;
     defaultMiner: string;
     defaultGasPrice: BN;
     version: BN;
@@ -44,6 +45,7 @@ export class BlockChain {
     }
 
     constructor(
+        amountTxBlocksPearDSBlock: number,
         difficulty: number,
         dsDifficulty: number,
         version: BN,
@@ -64,6 +66,7 @@ export class BlockChain {
         this.defaultGasPrice = defaultGasPrice;
         this.genesisTxBlock = genesisTxBlock;
         this.chainId = chainId;
+        this.amountTxBlocksPearDSBlock = amountTxBlocksPearDSBlock;
         
         this._storage = storage;
 
@@ -93,47 +96,28 @@ export class BlockChain {
         const minedBlock = await this.pow.mineBlock<DSBlock>(newBlock);
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
-        // this.txBlocks.reset();
+        this._storage.setNewDSBlock(minedBlock);
+        this.txBlocks.reset();
     }
 
     public getDSBlock(blockNum: number) {
-        const lastBlock = this.getLastDSBlock;
+        let foundDsBlock = this.dsBlocks.get(blockNum);
 
-        if (!lastBlock) {
-            return null;
+        if (!foundDsBlock) {
+            foundDsBlock = this._storage.getDSBlock(blockNum);
         }
 
-        const blockNumber = lastBlock.getHeader().getBlockNum();
-
-        if (this.getDSBlockCount > 0 && blockNumber < blockNum) {
-            console.warn(`BlockNum too high ${blockNum} Dummy block used`);
-        } else if (!this.dsBlocks.has(blockNum)) {
-            // Get from store...
-        } else {
-            return this.dsBlocks.get(blockNum);
-        }
-
-        return null;
+        return foundDsBlock;
     }
 
     public getTXBlock(blockNum: number) {
-        const lastBlock = this.getLastTXBlock;
+        let foundTxBlock = this.txBlocks.get(blockNum);
 
-        if (!lastBlock) {
-            return null;
+        if (!foundTxBlock) {
+            foundTxBlock = this._storage.getTXBlock(blockNum);
         }
 
-        const blockNumber = lastBlock.getHeader().getBlockNum();
-
-        if (this.getTXBlockCount > 0 && blockNumber < blockNum) {
-            console.warn(`BlockNum too high ${blockNum} Dummy block used`);
-        } else if (!this.txBlocks.has(blockNum)) {
-            // Get from store...
-        } else {
-            return this.txBlocks.get(blockNum);
-        }
-
-        return null;
+        return foundTxBlock;
     }
 
     async addBlock(block: TxBlock) {
@@ -142,7 +126,7 @@ export class BlockChain {
 
             this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
 
-            if (this.txBlocks.size() >= 100) {
+            if (this.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
                 await this._createDSBlock();
             }
 

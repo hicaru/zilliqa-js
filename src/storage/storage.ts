@@ -1,10 +1,10 @@
 import { CircularArray, DSBlock, TxBlock, Transaction, Account } from '../common';
 
 export abstract class Storage {
-    abstract getDSBlock(blockNumber: number): void;
-    abstract getTXBlock(blockNumber: number): void;
-    abstract getTX(hash: string): void;
-    abstract getAccount(adress: string): void;
+    abstract getDSBlock(blockNumber: number): DSBlock | null;
+    abstract getTXBlock(blockNumber: number): TxBlock | null;
+    abstract getTX(hash: string): Transaction | null;
+    abstract getAccount(adress: string): Account | null;
 
     abstract setNewDSBlock(block: DSBlock): void;
 }
@@ -15,7 +15,7 @@ export class MemmoryStorage extends Storage {
     dsBlocks = new CircularArray<string>();
     accounts = new CircularArray<string>();
 
-    getDSBlock(blockNumber: number): DSBlock | null {
+    getDSBlock(blockNumber: number) {
         const block = this.dsBlocks.get(blockNumber);
 
         if (!block) {
@@ -25,7 +25,7 @@ export class MemmoryStorage extends Storage {
         return JSON.parse(block);
     }
 
-    getTXBlock(blockNumber: number): TxBlock | null {
+    getTXBlock(blockNumber: number) {
         const dsBlockNumber = Number(this.txBlocks.get(blockNumber));
         
         if (!dsBlockNumber) {
@@ -47,7 +47,7 @@ export class MemmoryStorage extends Storage {
         return txBlcok;
     }
 
-    getTX(hash: string): Transaction | null {
+    getTX(hash: string) {
         const txBlockNumber = Number(this.txns.get(hash));
 
         if (!txBlockNumber) {
@@ -64,7 +64,7 @@ export class MemmoryStorage extends Storage {
         return tx;
     }
 
-    getAccount(address: string): Account | null {
+    getAccount(address: string) {
         const account = this.accounts.get(address);
 
         if (!account) {

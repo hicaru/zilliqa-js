@@ -17,6 +17,7 @@ export const MINER_PUBKEY = '0x02AAE728127EB5A30B07D798D5236251808AD2C8BA3F18B23
 export const GENESIS_BLOCK_NUMBER = 0;
 export const DEFAULT_GAS_PRICE = new BN('1000000000');
 export const PORT = 4200;
+export const TX_BLOCKS_PEAR_DS_BLOCK = 100;
 
 export const DEFAULT_SW_INFO = new SWInfo();
 export const GENESIS_TX_BLOCK = new TxBlock(

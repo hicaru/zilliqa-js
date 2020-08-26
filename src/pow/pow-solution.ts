@@ -22,20 +22,22 @@ export class PowSolution {
 
         return new Promise((resolve) => {
             (function loop() {
-                if (minedBlock.isValid()) {
-                    resolve(minedBlock);
-
-                    // console.info(
-                    //     `${chalk.bold.greenBright(block.constructor.name)} 
-                    //     ${chalk.cyan('block-number', block.blockHeader.blockNum)} 
-                    //     ${chalk.cyan('hash', block.blockHash)} 
-                    //     ${chalk.cyan('Timestamp', new Date(block.timestamp).toISOString())}`
-                    // );
-                } else {
-                    minedBlock.blockHash = minedBlock.calculateHash();
-                    // Give Node.js the chance to clear the stack.
-                    setImmediate(loop);
-                }
+                setTimeout(() => {
+                    if (minedBlock.isValid()) {
+                        resolve(minedBlock);
+    
+                        console.info(
+                            `${chalk.bold.greenBright(block.constructor.name)} 
+                            ${chalk.cyan('block-number', block.blockHeader.blockNum)} 
+                            ${chalk.cyan('hash', block.blockHash)} 
+                            ${chalk.cyan('Timestamp', new Date(block.timestamp).toISOString())}`
+                        );
+                    } else {
+                        minedBlock.blockHash = minedBlock.calculateHash();
+                        // Give Node.js the chance to clear the stack.
+                        setImmediate(loop);
+                    }
+                }, block.difficulty);
             })();
         });
     }

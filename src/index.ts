@@ -8,7 +8,8 @@ import {
     ZERO_HASH,
     MINER_PUBKEY,
     CHAIN_ID,
-    DEFAULT_GAS_PRICE
+    DEFAULT_GAS_PRICE,
+    TX_BLOCKS_PEAR_DS_BLOCK
 } from './config';
 import App from './server';
 import { MemmoryStorage } from './storage';
@@ -16,6 +17,7 @@ import { MemmoryStorage } from './storage';
 export function main() {
     const storage = new MemmoryStorage();
     const chain = new BlockChain(
+        TX_BLOCKS_PEAR_DS_BLOCK,
         DIFFICULTY,
         DS_DIFFICULTY,
         VERSION,

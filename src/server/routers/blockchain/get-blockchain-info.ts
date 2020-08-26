@@ -18,10 +18,10 @@ export default function(req: Request, res: Response) {
             CurrentDSEpoch: String(lastDSBlock.blockHeader.blockNum),
             CurrentMiniEpoch: "0",
             DSBlockRate: 1,
-            NumDSBlocks: String(chain.dsBlocks.size),
+            NumDSBlocks: String(chain.dsBlocks.size()),
             NumPeers: 0,
             NumTransactions: "4350627",
-            NumTxBlocks: String(chain.txBlocks.size),
+            NumTxBlocks: String(chain.txBlocks.size()),
             NumTxnsDSEpoch: "748",
             NumTxnsTxEpoch: "0",
             ShardingStructure: {
