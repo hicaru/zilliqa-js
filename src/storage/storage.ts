@@ -75,6 +75,6 @@ export class MemmoryStorage extends Storage {
     }
 
     setNewDSBlock(block: DSBlock) {
-
+        const txBlocks = block.txBlocks.list;
     }
 }
