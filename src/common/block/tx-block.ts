@@ -33,6 +33,7 @@ export class TxBlockHeader extends BaseBlockHeader {
 
 export class TxBlock extends BaseBlock {
     transactions = new CircularArray<Transaction>();
+    blockHeader!: TxBlockHeader;
 
     constructor(
         timestamp: number,

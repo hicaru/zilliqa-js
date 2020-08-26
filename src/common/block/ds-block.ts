@@ -49,7 +49,7 @@ export class DSBlock extends BaseBlock {
             difficulty: this.difficulty,
             dsDifficulty: header.dsDifficulty,
             leaderPubKey: header.leaderPubKey,
-            gasPrice: header.gasPrice,
+            gasPrice: header.gasPrice.toString(),
             txBlocks: this.txBlocks.list
         });
     }

@@ -1,4 +1,6 @@
-import { CircularArray, DSBlock, TxBlock, Transaction, Account } from '../common';
+import { CircularArray, DSBlock, TxBlock, Transaction, Account, DSBlockHeader, TxBlockHeader } from '../common';
+import BN from 'bn.js';
+import { json } from 'body-parser';
 
 export abstract class Storage {
     abstract getDSBlock(blockNumber: number): DSBlock | null;
@@ -7,6 +9,8 @@ export abstract class Storage {
     abstract getAccount(adress: string): Account | null;
 
     abstract setNewDSBlock(block: DSBlock): void;
+
+    constructor() {}
 }
 
 export class MemmoryStorage extends Storage {
@@ -22,7 +26,26 @@ export class MemmoryStorage extends Storage {
             return null;
         }
 
-        return JSON.parse(block);
+        const dsBlock = JSON.parse(block);
+        const header = new DSBlockHeader(
+            new BN(dsBlock.blockHeader.version),
+            dsBlock.blockHeader.prevHash,
+            dsBlock.blockHeader.blockNum,
+            dsBlock.blockHeader.dsDifficulty,
+            dsBlock.blockHeader.difficulty,
+            dsBlock.blockHeader.leaderPubKey,
+            new BN(Number(`0x${dsBlock.blockHeader.gasPrice}`))
+        );
+
+        const ds = new DSBlock(
+            dsBlock.timestamp,
+            dsBlock.dsDifficulty,
+            header
+        );
+
+        ds.txBlocks.addList(dsBlock.txBlocks.items)
+
+        return ds;
     }
 
     getTXBlock(blockNumber: number) {
@@ -38,13 +61,29 @@ export class MemmoryStorage extends Storage {
             return null
         }
 
-        const txBlcok = dsBlock.txBlocks.get(blockNumber);
+        const txBlock = dsBlock.txBlocks.get(blockNumber) as any;
 
-        if (txBlcok) {
+        if (!txBlock) {
             return null;
         }
 
-        return txBlcok;
+        const header = new TxBlockHeader(
+            new BN(txBlock.blockHeader.version),
+            new BN(Number(`0x${txBlock.blockHeader.gasLimit}`)),
+            txBlock.blockHeader.blockNum,
+            txBlock.blockHeader.prevHash,
+            txBlock.blockHeader.minerPubKey,
+            txBlock.blockHeader.dsBlockNum
+        );
+        const block = new TxBlock(
+            txBlock.timestamp,
+            txBlock.difficulty,
+            header
+        );
+
+        block.transactions.addList(txBlock.transactions.items);
+
+        return block;
     }
 
     getTX(hash: string) {
@@ -75,7 +114,7 @@ export class MemmoryStorage extends Storage {
     }
 
     setNewDSBlock(block: DSBlock) {
-        const dsBlock = block.serialize();
+        const dsBlock = JSON.stringify(block);
         const txBlocks = block.txBlocks.list;
         const txBlocksKeys = Object.keys(block.txBlocks.list);
 

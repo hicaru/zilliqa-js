@@ -17,6 +17,13 @@ export class CircularArray<T> {
         this.items[key] = item;
     }
 
+    addList(items: T) {
+        this.items = {
+            ...this.items,
+            ...items
+        }
+    }
+
     reset() {
         this.items = {};
     }
