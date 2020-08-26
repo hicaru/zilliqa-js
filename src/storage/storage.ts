@@ -10,7 +10,7 @@ export abstract class Storage {
 }
 
 export class MemmoryStorage extends Storage {
-    txns = new CircularArray<string>();
+    txns = new CircularArray<number>();
     txBlocks = new CircularArray<number>();
     dsBlocks = new CircularArray<string>();
     accounts = new CircularArray<string>();
@@ -75,6 +75,27 @@ export class MemmoryStorage extends Storage {
     }
 
     setNewDSBlock(block: DSBlock) {
+        const dsBlock = block.serialize();
         const txBlocks = block.txBlocks.list;
+        const txBlocksKeys = Object.keys(block.txBlocks.list);
+
+        for (let index = 0; index < txBlocksKeys.length; index++) {
+            const key = txBlocksKeys[index];
+            const txblock =  txBlocks[key];
+
+            this.txBlocks.add(block.getHeader().blockNum, key);
+
+            const txns = txblock.transactions.list;
+            const txnKeys = Object.keys(txns);
+
+            for (let index = 0; index < txnKeys.length; index++) {
+                const txKey = txnKeys[index];
+                const tx = txns[txKey];
+
+                this.txns.add(txblock.getHeader().blockNum, tx.hash);
+            }
+        }
+
+        this.dsBlocks.add(dsBlock, block.getHeader().blockNum);
     }
 }
