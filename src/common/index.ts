@@ -3,3 +3,4 @@ export * from './blockchain';
 export * from './circular-array';
 export * from './sw-info';
 export * from './transaction';
+export * from './account';

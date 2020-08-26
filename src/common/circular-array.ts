@@ -1,13 +1,13 @@
 export class CircularArray<T> {
     private items: {
-        [blockNumber: number]: T;
+        [key: string]: T;
     } = {}
 
     public get list() {
         return this.items;
     }
 
-    add(item: T, key: number) {
+    add(item: T, key: number | string) {
         if (this.getLastnumber() >= key && key !== 0) {
             const msg = 'block number inconsistent, increase the size of, CircularArray, blockNumMissed'
 
@@ -38,15 +38,15 @@ export class CircularArray<T> {
         return this.items[lastNumber];
     }
 
-    has(blockNumber: number) {
-        return Boolean(this.items[blockNumber]);
+    has(key: number | string) {
+        return Boolean(this.items[key]);
     }
 
-    get(blockNumber: number) {
-        if (!this.has(blockNumber)) {
+    get(key: number | string) {
+        if (!this.has(key)) {
             return null;
         }
 
-        return this.items[blockNumber];
+        return this.items[key];
     }
 }
