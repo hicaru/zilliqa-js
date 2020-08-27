@@ -120,6 +120,10 @@ export class BlockChain {
         return foundTxBlock;
     }
 
+    public getAccount(address: string) {
+        return this._storage.getAccount(address);
+    }
+
     async addBlock(block: TxBlock) {
         try {
             const minedBlock = await this.pow.mineBlock<TxBlock>(block);

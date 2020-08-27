@@ -110,7 +110,14 @@ export class MemmoryStorage extends Storage {
             return null;
         }
 
-        return JSON.parse(account) as Account;
+        const parsed = JSON.parse(account);
+        const foundAccount = new Account(
+            parsed.pubKey,
+            parsed.nonce,
+            parsed.balance
+        );
+
+        return foundAccount;
     }
 
     setNewDSBlock(block: DSBlock) {
