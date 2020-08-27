@@ -93,6 +93,8 @@ export class BlockChain {
 
         newBlock.txBlocks = this.txBlocks;
 
+        newBlock.updateHash();
+
         const minedBlock = await this.pow.mineBlock<DSBlock>(newBlock);
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
@@ -149,6 +151,7 @@ export class BlockChain {
                 this.difficulty,
                 newTxHeader
             );
+            newTxBlock.updateHash();
 
             this.addBlock(newTxBlock);
         } catch (err) {

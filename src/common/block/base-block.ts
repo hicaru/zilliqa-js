@@ -43,7 +43,7 @@ export class BaseBlock {
         this.blockHeader = blockHeader;
     }
 
-    protected _updateHash() {
+    public updateHash() {
         this.blockHash = this.calculateHash();
     }
 

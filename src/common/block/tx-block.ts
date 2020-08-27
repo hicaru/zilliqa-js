@@ -41,8 +41,6 @@ export class TxBlock extends BaseBlock {
         txBlockInfo: TxBlockHeader
     ) {
         super(timestamp, difficulty, txBlockInfo);
-
-        this._updateHash();
     }
 
     /**

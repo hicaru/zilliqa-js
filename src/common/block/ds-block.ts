@@ -37,8 +37,6 @@ export class DSBlock extends BaseBlock {
         dsBlockHeader: DSBlockHeader
     ) {
         super(timestamp, difficulty, dsBlockHeader);
-
-        this._updateHash();
     }
 
     serialize(): string {
@@ -52,6 +50,10 @@ export class DSBlock extends BaseBlock {
             gasPrice: header.gasPrice.toString(),
             txBlocks: this.txBlocks.list
         });
+    }
+
+    deserialize(json: string) {
+        const object = JSON.parse(json);
     }
 
     /**
