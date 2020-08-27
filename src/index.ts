@@ -1,3 +1,4 @@
+import { generateMnemonic } from 'bip39';
 import { BlockChain } from './common';
 import {
     DIFFICULTY,
@@ -15,6 +16,7 @@ import App from './server';
 import { MemmoryStorage } from './storage';
 
 export function main() {
+    const mnemonic = generateMnemonic();
     const storage = new MemmoryStorage();
     const chain = new BlockChain(
         TX_BLOCKS_PEAR_DS_BLOCK,
@@ -27,7 +29,8 @@ export function main() {
         MINER_PUBKEY,
         DEFAULT_GAS_PRICE,
         CHAIN_ID,
-        storage
+        storage,
+        mnemonic
     );
     
     // Starting jsonRPC server.

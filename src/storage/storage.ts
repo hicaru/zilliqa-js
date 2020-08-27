@@ -9,6 +9,7 @@ export abstract class Storage {
     abstract getAccount(adress: string): Account | null;
 
     abstract setNewDSBlock(block: DSBlock): void;
+    abstract setAccount(account: Account): void;
 
     constructor() {}
 }
@@ -85,7 +86,8 @@ export class MemmoryStorage extends Storage {
     }
 
     getAccount(address: string) {
-        const account = this.accounts.get(address);
+        const normalizedAddress = address.toLowerCase().replace('0x', '');
+        const account = this.accounts.get(normalizedAddress);
 
         if (!account) {
             return null;
@@ -124,5 +126,9 @@ export class MemmoryStorage extends Storage {
         }
 
         this.dsBlocks.add(dsBlock, block.getHeader().blockNum);
+    }
+
+    setAccount(account: Account) {
+        this.accounts.add(account.serialize(), account.address);
     }
 }

@@ -8,9 +8,11 @@ import { GasLimits } from '../../config';
 import { TxBlock, TxBlockHeader } from '../block/tx-block';
 import { Transaction } from '../transaction';
 import { Storage } from '../../storage';
+import { WalletCtrl } from '../wallet';
 
 export class BlockChain {
     private _storage: Storage;
+    private _wallet: WalletCtrl;
 
     dsBlocks = new CircularArray<DSBlock>();
     txBlocks = new CircularArray<TxBlock>();
@@ -55,7 +57,8 @@ export class BlockChain {
         defaultMiner: string,
         defaultGasPrice: BN,
         chainId: BN,
-        storage: Storage
+        storage: Storage,
+        mnemonic: string
     ) {
         this.difficulty = difficulty;
         this.dsDifficulty = dsDifficulty;
@@ -69,9 +72,18 @@ export class BlockChain {
         this.amountTxBlocksPearDSBlock = amountTxBlocksPearDSBlock;
         
         this._storage = storage;
+        this._wallet = new WalletCtrl(mnemonic);
 
         if (this.txBlocks.size() === 0) {
             this.addBlock(this.genesisTxBlock);
+        }
+
+        const genesisAccounts = this._wallet.initAccounts();
+
+        for (let index = 0; index < genesisAccounts.length; index++) {
+            const account = genesisAccounts[index];
+
+            this._storage.setAccount(account);
         }
     }
 

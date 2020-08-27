@@ -43,6 +43,7 @@
     "@zilliqa-js/zilliqa": "^1.0.0-alpha.1",
     "bintrees": "^1.0.2",
     "bip-schnorr": "^0.3.0",
+    "bip39": "^3.0.2",
     "bn.js": "^5.1.2",
     "body-parser": "^1.19.0",
     "chalk": "^4.1.0",
