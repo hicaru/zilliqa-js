@@ -11,12 +11,12 @@ export enum GasLimits {
 export const VERSION = new BN(1);
 export const CHAIN_ID = new BN(334);
 export const ZERO_HASH = '0000000000000000000000000000000000000000000000000000000000000000';
-export const DIFFICULTY = 999999;
-export const DS_DIFFICULTY = 999999;
+export const DIFFICULTY = 10;
+export const DS_DIFFICULTY = 20;
 export const MINER_PUBKEY = '0x02AAE728127EB5A30B07D798D5236251808AD2C8BA3F18B230449D0C938969B552';
 export const GENESIS_BLOCK_NUMBER = 0;
 export const DEFAULT_GAS_PRICE = new BN('1000000000');
-export const PORT = 4200;
+export const PORT = 80;
 export const TX_BLOCKS_PEAR_DS_BLOCK = 100;
 
 export const DEFAULT_SW_INFO = new SWInfo();

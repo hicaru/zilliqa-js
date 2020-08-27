@@ -37,11 +37,11 @@ export class BlockChain {
     }
 
     get getLastDSBlock() {
-        return this.dsBlocks.getLast();;
+        return this.dsBlocks.getLast();
     }
 
     get getLastTXBlock() {
-        return this.txBlocks.getLast();;
+        return this.txBlocks.getLast();
     }
 
     constructor(
@@ -70,7 +70,7 @@ export class BlockChain {
         
         this._storage = storage;
 
-        if (this.dsBlocks.size() === 0) {
+        if (this.txBlocks.size() === 0) {
             this.addBlock(this.genesisTxBlock);
         }
     }
@@ -78,7 +78,7 @@ export class BlockChain {
     private async _createDSBlock() {
         const lastBlock = this.getLastDSBlock;
         const lastBlockHash = !lastBlock ? this.zeroHash : lastBlock.blockHash;
-        const lastBlockNumber = !lastBlock ? this.genesisBlockNumber : lastBlock.getHeader().getBlockNum();
+        const lastBlockNumber = !lastBlock ? this.genesisBlockNumber - 1 : lastBlock.getHeader().getBlockNum();
         const header = new DSBlockHeader(
             this.version,
             lastBlockHash,
@@ -132,7 +132,7 @@ export class BlockChain {
 
             this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
 
-            if (this.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
+            if (this.txBlocks.size() >= this.amountTxBlocksPearDSBlock || this.dsBlocks.size() === 0) {
                 await this._createDSBlock();
             }
 

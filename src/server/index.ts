@@ -1,5 +1,6 @@
 import express from 'express';
 import bodyParser from 'body-parser';
+import cors from 'cors';
 import { PORT } from '../config';
 import { BlockChain } from '../common';
 import middleware from './middleware';
@@ -11,6 +12,7 @@ app.use(bodyParser.json());
 
 export default function(chain: BlockChain) {
     app.set('chain', chain);
+    app.use(cors());
     app.use(middleware, routers);
 
     app.listen(PORT, () => {

@@ -5,6 +5,8 @@ import { Methods } from '../methods';
 export default function(req: Request, res: Response, next: NextFunction) {
     const { method, body } = req;
 
+    res.header("Access-Control-Allow-Origin", "*");
+
     if (body && body.method && !Object.values(Methods).includes(body.method)) {
         return res.json({
             id: body.id,

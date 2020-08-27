@@ -35,7 +35,7 @@ export class PowSolution {
                 } else {
                     minedBlock.blockHash = minedBlock.calculateHash();
                 }
-            }, 0);
+            }, 1000);
         });
     }
 }
