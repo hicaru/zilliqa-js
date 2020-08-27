@@ -174,4 +174,8 @@ export class BlockChain {
         }
     }
 
+    addTransaction(transaction: Transaction) {
+        console.log(transaction);
+    }
+
 }

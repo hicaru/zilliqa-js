@@ -5,11 +5,11 @@ import { SHA256 } from 'crypto-js';
 import { Account } from './account';
 
 export class Transaction {
-    version: BN;
-    nonce: BN;
-    amount: BN;
-    gasPrice: BN;
-    gasLimit: BN;
+    nonce: number;
+    amount: string;
+    gasPrice: string;
+    gasLimit: string;
+    version: number;
     priority: boolean;
     code: string;
     data: string;
@@ -41,11 +41,11 @@ export class Transaction {
     }
 
     constructor(
-        version: BN,
-        nonce: BN,
-        amount: BN,
-        gasPrice: BN,
-        gasLimit: BN,
+        version: number,
+        nonce: number,
+        amount: string,
+        gasPrice: string,
+        gasLimit: string,
         code: string,
         data: string,
         toAddr: string,
