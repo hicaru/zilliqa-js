@@ -26,26 +26,7 @@ export class MemmoryStorage extends Storage {
             return null;
         }
 
-        const dsBlock = JSON.parse(block);
-        const header = new DSBlockHeader(
-            new BN(dsBlock.blockHeader.version),
-            dsBlock.blockHeader.prevHash,
-            dsBlock.blockHeader.blockNum,
-            dsBlock.blockHeader.dsDifficulty,
-            dsBlock.blockHeader.difficulty,
-            dsBlock.blockHeader.leaderPubKey,
-            new BN(Number(`0x${dsBlock.blockHeader.gasPrice}`))
-        );
-
-        const ds = new DSBlock(
-            dsBlock.timestamp,
-            dsBlock.dsDifficulty,
-            header
-        );
-
-        ds.txBlocks.addList(dsBlock.txBlocks.items)
-
-        return ds;
+        return DSBlock.deserialize(block);
     }
 
     getTXBlock(blockNumber: number) {

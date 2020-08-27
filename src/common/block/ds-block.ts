@@ -30,6 +30,31 @@ export class DSBlockHeader extends BaseBlockHeader {
 
 export class DSBlock extends BaseBlock {
     public txBlocks = new CircularArray<TxBlock>();
+    blockHeader!: DSBlockHeader;
+
+    static deserialize(json: string) {
+        const dsBlock = JSON.parse(json);
+        const header = new DSBlockHeader(
+            new BN(dsBlock.blockHeader.version),
+            dsBlock.blockHeader.prevHash,
+            dsBlock.blockHeader.blockNum,
+            dsBlock.blockHeader.dsDifficulty,
+            dsBlock.blockHeader.difficulty,
+            dsBlock.blockHeader.leaderPubKey,
+            new BN(Number(`0x${dsBlock.blockHeader.gasPrice}`))
+        );
+
+        const ds = new DSBlock(
+            dsBlock.timestamp,
+            dsBlock.dsDifficulty,
+            header
+        );
+
+        ds.txBlocks.addList(dsBlock.txBlocks.items);
+        ds.blockHash = dsBlock.blockHash;
+
+        return ds;
+    }
 
     constructor(
         timestamp: number,
@@ -50,10 +75,6 @@ export class DSBlock extends BaseBlock {
             gasPrice: header.gasPrice.toString(),
             txBlocks: this.txBlocks.list
         });
-    }
-
-    deserialize(json: string) {
-        const object = JSON.parse(json);
     }
 
     /**
