@@ -5,6 +5,8 @@ export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
 
+    console.log(body);
+
     return res.json({
         id: body.id,
         jsonrpc: body.jsonrpc,
