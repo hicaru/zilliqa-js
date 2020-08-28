@@ -90,11 +90,11 @@ export class TxBlock extends BaseBlock {
             return false;
         }
 
-        const blocks = Object.keys(this.transactions.list);
+        const hashs = Object.keys(this.transactions.list);
 
-        for (let index = 0; index < blocks.length; index++) {
-            const key = Number(blocks[index]);
-            const tx = this.transactions.list[key];
+        for (let index = 0; index < hashs.length; index++) {
+            const hash = hashs[index];
+            const tx = this.transactions.list[hash];
 
             if (!tx.isValid()) {
                 return false;

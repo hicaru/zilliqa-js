@@ -9,7 +9,6 @@ import { TxBlock, TxBlockHeader } from '../block/tx-block';
 import { Transaction } from '../transaction';
 import { Storage } from '../../storage';
 import { WalletCtrl } from '../wallet';
-import e from 'express';
 
 export class BlockChain {
     private _storage: Storage;
@@ -164,10 +163,10 @@ export class BlockChain {
                 this.difficulty,
                 newTxHeader
             );
+            newTxBlock.transactions.addList(this.pendingTxns.list as any);
             newTxBlock.updateHash();
 
-            console.log(this.pendingTxns.list);
-
+            this.pendingTxns.reset();
             this.addBlock(newTxBlock);
         } catch (err) {
             console.error(
