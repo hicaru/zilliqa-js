@@ -22,21 +22,6 @@ export class Transaction {
     signature: string;
     account: Account;
 
-    get message() {
-        return JSON.stringify({
-            amount: String(this.amount),
-            code: this.code,
-            data: this.data,
-            gasLimit: String(this.gasLimit),
-            gasPrice: String(this.gasPrice),
-            nonce: String(this.nonce),
-            priority: this.priority,
-            pubKey: String(this.pubKey),
-            toAddr: String(this.toAddr).toLowerCase(),
-            version: String(this.version)
-        });
-    }
-
     /**
      * Creates a SHA256 hash of the transaction
      */
@@ -120,4 +105,20 @@ export class Transaction {
         }
     }
 
+    serialize() {
+        return JSON.stringify({
+            amount: String(this.amount),
+            code: this.code,
+            data: this.data,
+            gasLimit: String(this.gasLimit),
+            gasPrice: String(this.gasPrice),
+            nonce: String(this.nonce),
+            priority: this.priority,
+            pubKey: String(this.pubKey),
+            toAddr: String(this.toAddr).toLowerCase(),
+            version: String(this.version),
+            signature: String(this.signature),
+            hash: String(this.hash)
+        });
+    }
 }

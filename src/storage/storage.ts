@@ -1,6 +1,5 @@
 import { CircularArray, DSBlock, TxBlock, Transaction, Account, DSBlockHeader, TxBlockHeader } from '../common';
 import BN from 'bn.js';
-import { json } from 'body-parser';
 
 export abstract class Storage {
     abstract getDSBlock(blockNumber: number): DSBlock | null;
@@ -15,7 +14,7 @@ export abstract class Storage {
 }
 
 export class MemmoryStorage extends Storage {
-    txns = new CircularArray<number>();
+    txns = new CircularArray<string>();
     txBlocks = new CircularArray<number>();
     dsBlocks = new CircularArray<string>();
     accounts = new CircularArray<string>();
@@ -69,13 +68,13 @@ export class MemmoryStorage extends Storage {
     }
 
     getTX(hash: string) {
-        const txBlockNumber = Number(this.txns.get(hash));
+        const txBlockNumber = this.txns.get(hash);
 
         if (!txBlockNumber) {
             return null;
         }
 
-        const txBlock = this.getTXBlock(txBlockNumber);
+        const txBlock = this.getTXBlock(Number(txBlockNumber));
         const tx = txBlock?.transactions.get(hash);
 
         if (!tx) {
@@ -121,7 +120,7 @@ export class MemmoryStorage extends Storage {
                 const txKey = txnKeys[index];
                 const tx = txns[txKey];
 
-                this.txns.add(txblock.getHeader().blockNum, tx.hash);
+                this.txns.add(tx.serialize(), tx.hash);
             }
         }
 
