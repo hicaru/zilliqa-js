@@ -1,6 +1,5 @@
 import BN from 'bn.js';
-import schnorr from 'bip-schnorr';
-import { SHA256 } from 'crypto-js';
+import  { sha256 } from 'hash.js';
 
 import { Account } from './account';
 
@@ -37,7 +36,12 @@ export class Transaction {
      * Creates a SHA256 hash of the transaction
      */
     get hash() {
-        return SHA256(this.message).toString();
+        const buf = Buffer.from(this.message);
+        const sha256HashSum = sha256()
+            .update(buf)
+            .digest('hex');
+
+        return sha256HashSum;
     }
 
     constructor(
@@ -75,14 +79,15 @@ export class Transaction {
      * @returns {boolean}
      */
     public isValid(): boolean {
-        const publicKey = Buffer.from(this.pubKey, 'hex');
-        const signatureToVerify = Buffer.from(this.signature, 'hex');
+        return false;
+        // const publicKey = Buffer.from(this.pubKey, 'hex');
+        // const signatureToVerify = Buffer.from(this.signature, 'hex');
 
-        try {
-            return schnorr.verify(publicKey, this.message, signatureToVerify);
-        } catch {
-            return false;
-        }
+        // try {
+        //     return schnorr.verify(publicKey, this.message, signatureToVerify);
+        // } catch {
+        //     return false;
+        // }
     }
 
 }

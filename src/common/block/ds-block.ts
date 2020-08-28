@@ -41,7 +41,7 @@ export class DSBlock extends BaseBlock {
             dsBlock.blockHeader.dsDifficulty,
             dsBlock.blockHeader.difficulty,
             dsBlock.blockHeader.leaderPubKey,
-            new BN(Number(`0x${dsBlock.blockHeader.gasPrice}`))
+            new BN(dsBlock.blockHeader.gasPrice, 16)
         );
 
         const ds = new DSBlock(

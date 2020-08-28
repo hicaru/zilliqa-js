@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import { SHA256 } from 'crypto-js';
+import { sha256 } from 'hash.js';
 
 import { BaseBlock, BaseBlockHeader } from './base-block';
 import { CircularArray } from '../circular-array';
@@ -27,7 +27,12 @@ export class TxBlockHeader extends BaseBlockHeader {
     }
 
     headerSign() {
-        return SHA256(JSON.stringify(this)).toString();
+        const buf = Buffer.from(JSON.stringify(this));
+        const sha256HashSum = sha256()
+            .update(buf)
+            .digest('hex');
+
+        return sha256HashSum;
     }
 }
 

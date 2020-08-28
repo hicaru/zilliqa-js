@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import { SHA256 } from 'crypto-js';
+import  { sha256 } from 'hash.js';
 import { validator } from '../../crypto';
 
 export class BaseBlockHeader {
@@ -90,8 +90,12 @@ export class BaseBlock {
      */
     calculateHash(): string {
         const serializeBlock = this.serialize();
+        const buf = Buffer.from(serializeBlock);
+        const sha256HashSum = sha256()
+            .update(buf)
+            .digest('hex');
 
-        return SHA256(serializeBlock).toString();
+        return sha256HashSum;
     }
 
     serialize(): string {
