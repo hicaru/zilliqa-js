@@ -35,3 +35,14 @@ export function notSupport(id: string = '1', jsonrpc: string = '2.0', msg: strin
         }
     }
 }
+export function unableToVerifyTransaction(id: string = '1', jsonrpc: string = '2.0', data = null) {
+    return {
+        id,
+        jsonrpc,
+        error: {
+            data,
+            code: RPCErrorCode.RPC_VERIFY_REJECTED,
+            message: 'Unable to verify transaction'
+        }
+    }
+}

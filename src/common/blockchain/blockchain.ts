@@ -175,7 +175,7 @@ export class BlockChain {
     }
 
     addTransaction(transaction: Transaction) {
-        console.log(transaction);
+        console.log(transaction.isValid());
     }
 
 }

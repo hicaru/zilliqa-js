@@ -1,9 +1,14 @@
 import BN from 'bn.js';
-import  { sha256 } from 'hash.js';
+import { sha256 } from 'hash.js';
+import { encodeTransactionProto } from '@zilliqa-js/account/dist//util';
+import { Long } from '@zilliqa-js/util';
+import { schnorr } from '@zilliqa-js/crypto';
 
 import { Account } from './account';
 
 export class Transaction {
+    private _bytes: Buffer;
+
     nonce: number;
     amount: string;
     gasPrice: string;
@@ -36,12 +41,23 @@ export class Transaction {
      * Creates a SHA256 hash of the transaction
      */
     get hash() {
-        const buf = Buffer.from(this.message);
         const sha256HashSum = sha256()
-            .update(buf)
+            .update(this._bytes)
             .digest('hex');
 
         return sha256HashSum;
+    }
+
+    get info() {
+        if (!this.data && !this.code) {
+            return 'Non-contract txn, sent to shard';
+        } else if (this.data && this.code) {
+            return 'Contract Creation txn, sent to shard';
+        } else if (this.data && !this.code) {
+            return 'Contract Txn, Sent To Ds';
+        }
+
+        return 'Contract Txn, Shards Match of the sender and reciever';
     }
 
     constructor(
@@ -70,6 +86,17 @@ export class Transaction {
         this.priority = priority;
 
         this.account = new Account(this.pubKey, 0, new BN(0));
+        this._bytes = encodeTransactionProto({
+            version,
+            toAddr,
+            nonce,
+            code,
+            data,
+            pubKey,
+            amount: new BN(amount),
+            gasLimit: Long.fromNumber(Number(gasLimit)),
+            gasPrice: new BN(gasPrice)
+        });
     }
 
     /**
@@ -79,15 +106,18 @@ export class Transaction {
      * @returns {boolean}
      */
     public isValid(): boolean {
-        return false;
-        // const publicKey = Buffer.from(this.pubKey, 'hex');
-        // const signatureToVerify = Buffer.from(this.signature, 'hex');
+        try {
+            const publicKey = Buffer.from(this.pubKey, 'hex');
+            const signature = schnorr.toSignature(this.signature);
 
-        // try {
-        //     return schnorr.verify(publicKey, this.message, signatureToVerify);
-        // } catch {
-        //     return false;
-        // }
+            return schnorr.verify(
+                this._bytes,
+                signature,
+                publicKey
+            );
+        } catch {
+            return false;
+        }
     }
 
 }

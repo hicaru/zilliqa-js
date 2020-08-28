@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { BlockChain, Transaction } from '../../../common';
-import { invalidParams } from '../../errors';
+import { invalidParams, unableToVerifyTransaction } from '../../errors';
 
 export default function(req: Request, res: Response) {
     const { body } = req;
@@ -32,14 +32,12 @@ export default function(req: Request, res: Response) {
         return res.json({
             id: body.id,
             jsonrpc: body.jsonrpc,
-            result: String(chain.chainId)
+            result: {
+                Info: transaction.info,
+                TranID: transaction.hash
+            }
         });
     } catch (err) {
-        console.error(err);
-        return res.json({
-            id: body.id,
-            jsonrpc: body.jsonrpc,
-            result: String(chain.chainId)
-        });
+        return res.json(unableToVerifyTransaction(body.id, body.jsonrpc));
     }
 };
