@@ -143,6 +143,8 @@ export class BlockChain {
             const minedBlock = await this.pow.mineBlock<TxBlock>(block);
 
             this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
+            this._storage.setNewTXBlock(minedBlock);
+            this.pendingTxns.reset();
 
             if (this.txBlocks.size() >= this.amountTxBlocksPearDSBlock || this.dsBlocks.size() === 0) {
                 await this._createDSBlock();
@@ -166,7 +168,6 @@ export class BlockChain {
             newTxBlock.transactions.addList(this.pendingTxns.list as any);
             newTxBlock.updateHash();
 
-            this.pendingTxns.reset();
             this.addBlock(newTxBlock);
         } catch (err) {
             console.error(
