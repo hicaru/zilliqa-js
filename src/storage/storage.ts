@@ -1,5 +1,16 @@
-import { CircularArray, DSBlock, TxBlock, Transaction, Account, DSBlockHeader, TxBlockHeader } from '../common';
 import BN from 'bn.js';
+import fs from 'fs';
+import { LocalStorage } from 'node-localstorage';
+import {
+    CircularArray,
+    DSBlock,
+    TxBlock,
+    Transaction,
+    Account,
+    TxBlockHeader
+} from '../common';
+import { HOME_DIR } from '../config';
+import { normalizedAddress } from '../utils';
 
 export abstract class Storage {
     abstract getDSBlock(blockNumber: number): DSBlock | null;
@@ -8,6 +19,7 @@ export abstract class Storage {
     abstract getAccount(adress: string): Account | null;
 
     abstract setNewDSBlock(block: DSBlock): void;
+    abstract setNewTXBlock(block: TxBlock): void;
     abstract setAccount(account: Account): void;
 
     constructor() {}
@@ -15,38 +27,44 @@ export abstract class Storage {
 
 export class MemmoryStorage extends Storage {
     txns = new CircularArray<string>();
-    txBlocks = new CircularArray<number>();
+    txBlocks = new CircularArray<string>();
     dsBlocks = new CircularArray<string>();
     accounts = new CircularArray<string>();
 
-    getDSBlock(blockNumber: number) {
-        const block = this.dsBlocks.get(blockNumber);
+    private _txns: LocalStorage;
+    private _txBlocks: LocalStorage;
+    private _dsBlocks: LocalStorage;
+    private _accounts: LocalStorage;
 
-        if (!block) {
+    constructor() {
+        super();
+
+        fs.rmdirSync(HOME_DIR, { recursive: true });
+
+        this._txns = new LocalStorage(`${HOME_DIR}/txns`);
+        this._txBlocks = new LocalStorage(`${HOME_DIR}/tx-blocks`);
+        this._dsBlocks = new LocalStorage(`${HOME_DIR}/ds-blocks`);
+        this._accounts = new LocalStorage(`${HOME_DIR}/accounts`);
+    }
+
+    getDSBlock(blockNumber: number) {
+        const foundDSblock = this.dsBlocks.get(blockNumber);
+
+        if (!foundDSblock) {
             return null;
         }
 
-        return DSBlock.deserialize(block);
+        return DSBlock.deserialize(foundDSblock);
     }
 
     getTXBlock(blockNumber: number) {
-        const dsBlockNumber = Number(this.txBlocks.get(blockNumber));
+        const foundTXBlock = this.txBlocks.get(blockNumber);
         
-        if (!dsBlockNumber) {
+        if (!foundTXBlock) {
             return null;
         }
 
-        const dsBlock = this.getDSBlock(dsBlockNumber);
-
-        if (!dsBlock) {
-            return null
-        }
-
-        const txBlock = dsBlock.txBlocks.get(blockNumber) as any;
-
-        if (!txBlock) {
-            return null;
-        }
+        const txBlock = JSON.parse(foundTXBlock);
 
         const header = new TxBlockHeader(
             new BN(txBlock.blockHeader.version),
@@ -68,25 +86,17 @@ export class MemmoryStorage extends Storage {
     }
 
     getTX(hash: string) {
-        const txBlockNumber = this.txns.get(hash);
+        const foundTX = this.txns.get(hash);
 
-        if (!txBlockNumber) {
+        if (!foundTX) {
             return null;
         }
 
-        const txBlock = this.getTXBlock(Number(txBlockNumber));
-        const tx = txBlock?.transactions.get(hash);
-
-        if (!tx) {
-            return null;
-        }
-
-        return tx;
+        return Transaction.deserialize(foundTX, hash);
     }
 
     getAccount(address: string) {
-        const normalizedAddress = address.toLowerCase().replace('0x', '');
-        const account = this.accounts.get(normalizedAddress);
+        const account = this._accounts.getItem(normalizedAddress(address));
 
         if (!account) {
             return null;
@@ -104,30 +114,19 @@ export class MemmoryStorage extends Storage {
 
     setNewDSBlock(block: DSBlock) {
         const dsBlock = JSON.stringify(block);
-        const txBlocks = block.txBlocks.list;
-        const txBlocksKeys = Object.keys(block.txBlocks.list);
-
-        for (let index = 0; index < txBlocksKeys.length; index++) {
-            const key = txBlocksKeys[index];
-            const txblock =  txBlocks[key];
-
-            this.txBlocks.add(block.getHeader().blockNum, key);
-
-            const txns = txblock.transactions.list;
-            const txnKeys = Object.keys(txns);
-
-            for (let index = 0; index < txnKeys.length; index++) {
-                const txKey = txnKeys[index];
-                const tx = txns[txKey];
-
-                this.txns.add(tx.serialize(), tx.hash);
-            }
-        }
 
         this.dsBlocks.add(dsBlock, block.getHeader().blockNum);
     }
 
+    setNewTXBlock(block: TxBlock) {
+        const blocNumber = String(block.getHeader().blockNum);
+
+        this._txBlocks.setItem(blocNumber, block.serialize());
+    }
+
     setAccount(account: Account) {
-        this.accounts.add(account.serialize(), account.address);
+        const address = normalizedAddress(account.address);
+
+        this._accounts.setItem(account.serialize(), address);
     }
 }
