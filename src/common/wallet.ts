@@ -11,7 +11,7 @@ export class WalletCtrl {
     get addresses() {
         return Object
             .values(this.wallet.accounts)
-            .map((account) => this._toAddress(account.publicKey));
+            .map((account) => this._toAddress(account.address));
     }
 
     constructor(mnemonic: string) {
@@ -27,6 +27,6 @@ export class WalletCtrl {
     initAccounts() {
         return this
             .addresses
-            .map((pubKey) => new Account(pubKey, 0, INITIAL_BALANCE));
+            .map((address) => new Account(address, 0, INITIAL_BALANCE));
     }
 }

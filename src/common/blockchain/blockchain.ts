@@ -110,8 +110,7 @@ export class BlockChain {
         const minedBlock = await this.pow.mineBlock<DSBlock>(newBlock);
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
-        this._storage.setNewDSBlock(minedBlock);
-        this.txBlocks.reset();
+        this._storage.setNewDSBlock(minedBlock, () => this.txBlocks.reset());
     }
 
     public getDSBlock(blockNum: number) {
@@ -143,8 +142,7 @@ export class BlockChain {
             const minedBlock = await this.pow.mineBlock<TxBlock>(block);
 
             this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
-            this._storage.setNewTXBlock(minedBlock);
-            this.pendingTxns.reset();
+            this._storage.setNewTXBlock(minedBlock, () => this.pendingTxns.reset());
 
             if (this.txBlocks.size() >= this.amountTxBlocksPearDSBlock || this.dsBlocks.size() === 0) {
                 await this._createDSBlock();

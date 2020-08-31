@@ -18,8 +18,8 @@ export abstract class Storage {
     abstract getTX(hash: string): Transaction | null;
     abstract getAccount(adress: string): Account | null;
 
-    abstract setNewDSBlock(block: DSBlock): void;
-    abstract setNewTXBlock(block: TxBlock): void;
+    abstract setNewDSBlock(block: DSBlock, cb: Function): void;
+    abstract setNewTXBlock(block: TxBlock, cb: Function): void;
     abstract setAccount(account: Account): void;
 
     constructor() {}
@@ -107,13 +107,15 @@ export class MemmoryStorage extends Storage {
         return foundAccount;
     }
 
-    setNewDSBlock(block: DSBlock) {
+    setNewDSBlock(block: DSBlock, cb: Function) {
         const blockNumber = block.getHeader().blockNum;
 
         this._dsBlocks.setItem(String(blockNumber), block.serialize());
+
+        cb();
     }
 
-    setNewTXBlock(block: TxBlock) {
+    setNewTXBlock(block: TxBlock, cb: Function) {
         const blocNumber = block.getHeader().blockNum;
         const listOfTxns = block.transactions.list;
         const hashSet = Object.keys(listOfTxns);
@@ -147,11 +149,13 @@ export class MemmoryStorage extends Storage {
         }
 
         this._txBlocks.setItem(String(blocNumber), block.serialize());
+
+        cb();
     }
 
     setAccount(account: Account) {
         const address = normalizedAddress(account.address);
 
-        this._accounts.setItem(account.serialize(), address);
+        this._accounts.setItem(address, account.serialize());
     }
 }
