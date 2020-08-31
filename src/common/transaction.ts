@@ -3,6 +3,7 @@ import { sha256 } from 'hash.js';
 import { encodeTransactionProto } from '@zilliqa-js/account/dist//util';
 import { Long } from '@zilliqa-js/util';
 import { schnorr } from '@zilliqa-js/crypto';
+import { TransactionStatuses } from '../config';
 
 import { Account } from './account';
 
@@ -24,7 +25,7 @@ export class Transaction {
     account: Account;
 
     blockNumber?: number;
-    id?: string;
+    status?: TransactionStatuses;
 
     get info() {
         if (!this.data && !this.code) {
@@ -116,6 +117,10 @@ export class Transaction {
 
     public asignBlock(blockNumber: number) {
         this.blockNumber = blockNumber;
+    }
+
+    public statusUpdate(status: TransactionStatuses) {
+        this.status = status;
     }
 
     /**

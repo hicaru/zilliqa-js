@@ -2,7 +2,6 @@ import BN from 'bn.js';
 import fs from 'fs';
 import { LocalStorage } from 'node-localstorage';
 import {
-    CircularArray,
     DSBlock,
     TxBlock,
     Transaction,
@@ -18,11 +17,9 @@ export abstract class Storage {
     abstract getTX(hash: string): Transaction | null;
     abstract getAccount(adress: string): Account | null;
 
-    abstract setNewDSBlock(block: DSBlock, cb: Function): void;
-    abstract setNewTXBlock(block: TxBlock, cb: Function): void;
+    abstract setNewDSBlock(block: DSBlock): void;
+    abstract setNewTXBlock(block: TxBlock): void;
     abstract setAccount(account: Account): void;
-
-    constructor() {}
 }
 
 export class MemmoryStorage extends Storage {
@@ -107,15 +104,13 @@ export class MemmoryStorage extends Storage {
         return foundAccount;
     }
 
-    setNewDSBlock(block: DSBlock, cb: Function) {
+    setNewDSBlock(block: DSBlock) {
         const blockNumber = block.getHeader().blockNum;
 
         this._dsBlocks.setItem(String(blockNumber), block.serialize());
-
-        cb();
     }
 
-    setNewTXBlock(block: TxBlock, cb: Function) {
+    setNewTXBlock(block: TxBlock) {
         const blocNumber = block.getHeader().blockNum;
         const listOfTxns = block.transactions.list;
         const hashSet = Object.keys(listOfTxns);
@@ -149,8 +144,6 @@ export class MemmoryStorage extends Storage {
         }
 
         this._txBlocks.setItem(String(blocNumber), block.serialize());
-
-        cb();
     }
 
     setAccount(account: Account) {
