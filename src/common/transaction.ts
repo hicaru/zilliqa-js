@@ -7,6 +7,12 @@ import { TransactionStatuses } from '../config';
 
 import { Account } from './account';
 
+export type Receipt = {
+    cumulative_gas: string;
+    epoch_num: string;
+    success: boolean;
+};
+
 export class Transaction {
     private _bytes: Buffer;
 
@@ -26,6 +32,7 @@ export class Transaction {
 
     blockNumber?: number;
     status?: TransactionStatuses;
+    receipt?: Receipt;
 
     get info() {
         if (!this.data && !this.code) {
@@ -121,6 +128,14 @@ export class Transaction {
 
     public statusUpdate(status: TransactionStatuses) {
         this.status = status;
+    }
+
+    public setReceipt(cumulativeGas: string, epochNum: string, success: boolean) {
+        this.receipt = {
+            success,
+            cumulative_gas: cumulativeGas,
+            epoch_num: epochNum
+        }
     }
 
     /**
