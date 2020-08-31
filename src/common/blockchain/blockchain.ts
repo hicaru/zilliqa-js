@@ -111,7 +111,7 @@ export class BlockChain {
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
         this._storage.setNewDSBlock(minedBlock);
-        this.txBlocks.reset()
+        this.txBlocks.reset();
     }
 
     public getDSBlock(blockNum: number) {

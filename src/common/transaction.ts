@@ -46,6 +46,11 @@ export class Transaction {
         return 'Contract Txn, Shards Match of the sender and reciever';
     }
 
+    /**
+     * Covert json to Transaction instance format.
+     * @param json - Transaction as json format.
+     * @param hash - Transaction hash.
+     */
     public static deserialize(json: string, hash?: string) {
         const tx = JSON.parse(json);
 
@@ -60,15 +65,18 @@ export class Transaction {
             tx.toAddr,
             tx.pubKey,
             tx.signature,
-            tx.priority
+            tx.priority,
+            hash
         );
 
         if (String(tx.blockNumber)) {
             transaction.asignBlock(tx.blockNumber);
         }
 
-        if (hash) {
-            transaction.id = hash;
+        if (tx.receipt) {
+            const { cumulative_gas, epoch_num, success } = tx.receipt;
+
+            transaction.setReceipt(cumulative_gas, epoch_num, success);
         }
 
         return transaction;
@@ -122,10 +130,18 @@ export class Transaction {
         }
     }
 
+    /**
+     * Asign the transaction block number as singer block.
+     * @param blockNumber - Is transaction block number.
+     */
     public asignBlock(blockNumber: number) {
         this.blockNumber = blockNumber;
     }
 
+    /**
+     * Set status code of transaction.
+     * @param status - Is enum of Transaction codes.
+     */
     public statusUpdate(status: TransactionStatuses) {
         this.status = status;
     }
@@ -159,6 +175,9 @@ export class Transaction {
         }
     }
 
+    /**
+     * Covert transaction to json format.
+     */
     public serialize() {
         return JSON.stringify({
             amount: String(this.amount),
@@ -173,6 +192,7 @@ export class Transaction {
             version: String(this.version),
             signature: String(this.signature),
             hash: String(this.hash),
+            receipt: this.receipt,
             blockNumber: this.blockNumber
         });
     }
