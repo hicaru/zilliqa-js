@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import os from 'os';
 import { TxBlockHeader, TxBlock } from '../common';
 import { SWInfo } from '../common/sw-info';
 
@@ -8,6 +9,7 @@ export enum GasLimits {
     M = '100'
 }
 
+export const HOME_DIR = `${os.homedir()}/zilliqa-store`;
 export const VERSION = new BN(1);
 export const CHAIN_ID = new BN(334);
 export const ZERO_HASH = '0000000000000000000000000000000000000000000000000000000000000000';
