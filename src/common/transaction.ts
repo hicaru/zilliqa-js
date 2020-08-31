@@ -22,6 +22,9 @@ export class Transaction {
     signature: string;
     account: Account;
 
+    blockNumber?: number;
+    id?: string;
+
     /**
      * Creates a SHA256 hash of the transaction
      */
@@ -43,6 +46,34 @@ export class Transaction {
         }
 
         return 'Contract Txn, Shards Match of the sender and reciever';
+    }
+
+    public static deserialize(json: string, hash?: string) {
+        const tx = JSON.parse(json);
+
+        const transaction = new Transaction(
+            tx.version,
+            tx.nonce,
+            tx.amount,
+            tx.gasPrice,
+            tx.gasLimit,
+            tx.code,
+            tx.data,
+            tx.toAddr,
+            tx.pubKey,
+            tx.signature,
+            tx.priority
+        );
+
+        if (String(tx.blockNumber)) {
+            transaction.asignBlock(tx.blockNumber);
+        }
+
+        if (hash) {
+            transaction.id = hash;
+        }
+
+        return transaction;
     }
 
     constructor(
@@ -84,6 +115,10 @@ export class Transaction {
         });
     }
 
+    public asignBlock(blockNumber: number) {
+        this.blockNumber = blockNumber;
+    }
+
     /**
      * Checks if the signature is valid (transaction has not been tampered with).
      * It uses the fromAddress as the public key.
@@ -105,7 +140,7 @@ export class Transaction {
         }
     }
 
-    serialize() {
+    public serialize() {
         return JSON.stringify({
             amount: String(this.amount),
             code: this.code,
@@ -118,7 +153,8 @@ export class Transaction {
             toAddr: String(this.toAddr).toLowerCase(),
             version: String(this.version),
             signature: String(this.signature),
-            hash: String(this.hash)
+            hash: String(this.hash),
+            blockNumber: this.blockNumber
         });
     }
 }
