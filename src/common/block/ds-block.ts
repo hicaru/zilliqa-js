@@ -66,14 +66,20 @@ export class DSBlock extends BaseBlock {
 
     serialize(): string {
         const header = this.getHeader() as DSBlockHeader;
+        const txBlocksList = this.txBlocks.list;
+        const txBlocksNumbers = Object.keys(this.txBlocks.list);
+        const txBlocks = txBlocksNumbers.map((blockNumber) => ({
+            BlockNum: Number(blockNumber),
+            Hash: txBlocksList[blockNumber].blockHash
+        }));
 
         return JSON.stringify({
+            txBlocks,
             timestamp: this.timestamp,
             difficulty: this.difficulty,
             dsDifficulty: header.dsDifficulty,
             leaderPubKey: header.leaderPubKey,
-            gasPrice: header.gasPrice.toString(),
-            txBlocks: this.txBlocks.list
+            gasPrice: header.gasPrice.toString()
         });
     }
 

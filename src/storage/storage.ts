@@ -26,11 +26,6 @@ export abstract class Storage {
 }
 
 export class MemmoryStorage extends Storage {
-    txns = new CircularArray<string>();
-    txBlocks = new CircularArray<string>();
-    dsBlocks = new CircularArray<string>();
-    accounts = new CircularArray<string>();
-
     private _txns: LocalStorage;
     private _txBlocks: LocalStorage;
     private _dsBlocks: LocalStorage;
@@ -48,7 +43,7 @@ export class MemmoryStorage extends Storage {
     }
 
     getDSBlock(blockNumber: number) {
-        const foundDSblock = this.dsBlocks.get(blockNumber);
+        const foundDSblock = this._dsBlocks.getItem(String(blockNumber));
 
         if (!foundDSblock) {
             return null;
@@ -58,8 +53,8 @@ export class MemmoryStorage extends Storage {
     }
 
     getTXBlock(blockNumber: number) {
-        const foundTXBlock = this.txBlocks.get(blockNumber);
-        
+        const foundTXBlock = this._txBlocks.getItem(String(blockNumber));
+
         if (!foundTXBlock) {
             return null;
         }
@@ -86,7 +81,7 @@ export class MemmoryStorage extends Storage {
     }
 
     getTX(hash: string) {
-        const foundTX = this.txns.get(hash);
+        const foundTX = this._txns.getItem(hash);
 
         if (!foundTX) {
             return null;
@@ -113,15 +108,45 @@ export class MemmoryStorage extends Storage {
     }
 
     setNewDSBlock(block: DSBlock) {
-        const dsBlock = JSON.stringify(block);
+        const blockNumber = block.getHeader().blockNum;
 
-        this.dsBlocks.add(dsBlock, block.getHeader().blockNum);
+        this._dsBlocks.setItem(String(blockNumber), block.serialize());
     }
 
     setNewTXBlock(block: TxBlock) {
-        const blocNumber = String(block.getHeader().blockNum);
+        const blocNumber = block.getHeader().blockNum;
+        const listOfTxns = block.transactions.list;
+        const hashSet = Object.keys(listOfTxns);
 
-        this._txBlocks.setItem(blocNumber, block.serialize());
+        for (let index = 0; index < hashSet.length; index++) {
+            const hash = hashSet[index];
+            const tx = listOfTxns[hash];
+            const amount = new BN(tx.amount);
+            const sender = tx.account;
+            const toAddress = normalizedAddress(tx.toAddr);
+            const accountTo = this._accounts.getItem(toAddress);
+            let to: Account;
+
+            if (accountTo) {
+                const parsed = JSON.parse(accountTo);
+                const balance = new BN(parsed.balance);
+
+                to = new Account(toAddress, parsed.nonce, balance);
+            } else {
+                to = new Account(toAddress);
+            }
+
+            to.increaseBalance(amount);
+            sender.reduceBalance(amount);
+            tx.asignBlock(blocNumber);
+
+            this._txns.setItem(tx.hash, tx.serialize());
+
+            this.setAccount(to);
+            this.setAccount(sender);
+        }
+
+        this._txBlocks.setItem(String(blocNumber), block.serialize());
     }
 
     setAccount(account: Account) {

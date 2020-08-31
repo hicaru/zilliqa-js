@@ -68,16 +68,21 @@ export class TxBlock extends BaseBlock {
 
     serialize(): string {
         const header = this.getHeader() as TxBlockHeader;
+        const txList = this.transactions.list;
+        const txHashSet = Object.keys(txList);
+        const transactions = txHashSet.map((hash) => ({
+            BlockNum: this.getHeader().blockNum,
+            Hash: hash
+        }));
 
         return JSON.stringify({
+            transactions,
             timestamp: this.timestamp,
             difficulty: this.difficulty,
             gasLimit: header.gasLimit,
-            // rewards: header.rewards,
             minerPubKey: header.minerPubKey,
             numTxs: this.transactions.size(),
-            dsBlockNum: header.dsBlockNum,
-            transactions: this.transactions.list
+            dsBlockNum: header.dsBlockNum
         });
     }
 

@@ -9,6 +9,7 @@ import { Account } from './account';
 export class Transaction {
     private _bytes: Buffer;
 
+    hash: string;
     nonce: number;
     amount: string;
     gasPrice: string;
@@ -24,17 +25,6 @@ export class Transaction {
 
     blockNumber?: number;
     id?: string;
-
-    /**
-     * Creates a SHA256 hash of the transaction
-     */
-    get hash() {
-        const sha256HashSum = sha256()
-            .update(this._bytes)
-            .digest('hex');
-
-        return sha256HashSum;
-    }
 
     get info() {
         if (!this.data && !this.code) {
@@ -87,7 +77,8 @@ export class Transaction {
         toAddr: string,
         pubKey: string,
         signature: string,
-        priority = false
+        priority = false,
+        hash: string | null = null
     ) {
         this.version = version;
         this.nonce = nonce;
@@ -101,7 +92,7 @@ export class Transaction {
         this.signature = signature;
         this.priority = priority;
 
-        this.account = new Account(this.pubKey, 0, new BN(0));
+        this.account = Account.fromPubKey(this.pubKey, 0, new BN(0));
         this._bytes = encodeTransactionProto({
             version,
             toAddr,
@@ -113,6 +104,14 @@ export class Transaction {
             gasLimit: Long.fromNumber(Number(gasLimit)),
             gasPrice: new BN(gasPrice)
         });
+
+        if (!hash) {
+            this.hash = sha256()
+                .update(this._bytes)
+                .digest('hex');
+        } else {
+            this.hash = hash;
+        }
     }
 
     public asignBlock(blockNumber: number) {
