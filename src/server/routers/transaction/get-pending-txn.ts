@@ -9,7 +9,7 @@ export default function(req: Request, res: Response) {
 
     if (!hash) {
         return res.json(invalidParams(body.id, body.jsonrpc));
-    } else if (hash.length < 64 || hash.length > 64) {
+    } else if (hash.length != 64) {
         return res.json(invalidParams(body.id, body.jsonrpc, 'Txn Hash size not appropriate'));
     }
 
