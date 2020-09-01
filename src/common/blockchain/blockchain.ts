@@ -45,7 +45,7 @@ export class BlockChain {
     }
 
     public get getNumTransactions() {
-        return 0;
+        return this._storage.getTxnsLength;
     }
 
     constructor(
@@ -102,6 +102,14 @@ export class BlockChain {
     }
 
     public async start() {
+        console.log(
+            chalk.yellowBright('mnemonic:'),
+            chalk.green(this._wallet.mnemonic)
+        );
+        console.log(
+            chalk.yellowBright('staring blocks mining...')
+        );
+
         this._isRunniong = true;
 
         await this.txBlockchain.init(this.genesisTxBlock);

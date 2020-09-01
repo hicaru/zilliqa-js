@@ -6,7 +6,8 @@ import { AMOUNT_OF_ACCOUNTS, INITIAL_BALANCE } from '../config';
 import BN from 'bn.js';
 
 export class WalletCtrl {
-    wallet = new Wallet(new HTTPProvider(''));
+    public wallet = new Wallet(new HTTPProvider(''));
+    public readonly mnemonic: string;
 
     get addresses() {
         return Object
@@ -15,6 +16,8 @@ export class WalletCtrl {
     }
 
     constructor(mnemonic: string) {
+        this.mnemonic = mnemonic;
+
         for (let index = 0; index < AMOUNT_OF_ACCOUNTS; index++) {
             this.wallet.addByMnemonic(mnemonic, index);
         }

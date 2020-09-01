@@ -12,6 +12,8 @@ import { HOME_DIR } from '../config';
 import { normalizedAddress } from '../utils';
 
 export abstract class Storage {
+    abstract get getTxnsLength(): number;
+
     abstract getDSBlock(blockNumber: number): DSBlock | null;
     abstract getTXBlock(blockNumber: number): TxBlock | null;
     abstract getTX(hash: string): Transaction | null;
@@ -23,10 +25,14 @@ export abstract class Storage {
 }
 
 export class MemmoryStorage extends Storage {
-    private _txns: LocalStorage;
-    private _txBlocks: LocalStorage;
-    private _dsBlocks: LocalStorage;
-    private _accounts: LocalStorage;
+    private readonly _txns: LocalStorage;
+    private readonly _txBlocks: LocalStorage;
+    private readonly _dsBlocks: LocalStorage;
+    private readonly _accounts: LocalStorage;
+
+    get getTxnsLength() {
+        return this._txns.length;
+    }
 
     constructor() {
         super();
