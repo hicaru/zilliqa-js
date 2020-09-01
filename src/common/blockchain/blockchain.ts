@@ -115,6 +115,8 @@ export class BlockChain {
         while (this._isRunniong) {
             if (this.txBlockchain.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
                 await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
+
+                this.txBlockchain.txBlocks.reset();
             }
 
             if (!this.dsBlockchain.getLastDSBlock) {
