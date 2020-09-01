@@ -115,9 +115,17 @@ export class BlockChain {
         await this.txBlockchain.init(this.genesisTxBlock);
         await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
 
-        // while (this._isRunniong) {
+        while (this._isRunniong) {
+            if (this.txBlockchain.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
+                await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
+            }
 
-        // }
+            if (!this.dsBlockchain.getLastDSBlock) {
+                continue;
+            }
+
+            await this.txBlockchain.createTXBlock(this.dsBlockchain.getLastDSBlock);
+        }
     }
 
     public stop() {

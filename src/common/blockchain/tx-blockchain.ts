@@ -56,7 +56,7 @@ export class TXBlockchain {
      * @param dsBlock - Last DSBlock.
      * @param pendingTxns - All last added to queue txns.
      */
-    public async createTXBlock(dsBlock: DSBlock, pendingTxns: CircularArray<Transaction>) {
+    public async createTXBlock(dsBlock: DSBlock) {
         try {
             const lastBlock = this.getLastTXBlock;
 
@@ -78,7 +78,7 @@ export class TXBlockchain {
                 newTxHeader
             );
 
-            this._mineTxBlock(newTxBlock);
+            await this._mineTxBlock(newTxBlock);
         } catch (err) {
             console.error(
                 chalk.redBright('error'),
