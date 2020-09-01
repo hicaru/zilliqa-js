@@ -46,3 +46,15 @@ export function unableToVerifyTransaction(id: string = '1', jsonrpc: string = '2
         }
     }
 }
+
+export function UnableToProcess(id: string = '1', jsonrpc: string = '2.0', data = null) {
+    return {
+        id,
+        jsonrpc,
+        error: {
+            data,
+            code: RPCErrorCode.RPC_MISC_ERROR,
+            message: 'Unable to Process'
+        }
+    }
+}

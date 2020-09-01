@@ -8,6 +8,6 @@ export default function(req: Request, res: Response) {
     return res.json({
         id: body.id,
         jsonrpc: body.jsonrpc,
-        result: String(chain.chainId)
+        result: String(chain.defaultGasPrice)
     });
 };

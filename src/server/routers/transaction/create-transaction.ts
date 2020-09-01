@@ -26,6 +26,10 @@ export default function(req: Request, res: Response) {
             attributes.signature,
             attributes.priority
         );
+
+        if (!transaction.isValid()) {
+            return res.json(unableToVerifyTransaction(body.id, body.jsonrpc));
+        }
     
         chain.txBlockchain.addTransaction(transaction);
     

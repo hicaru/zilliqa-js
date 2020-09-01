@@ -136,8 +136,6 @@ export class MemmoryStorage extends Storage {
 
             this._txns.setItem(tx.hash, tx.serialize());
 
-            console.log(to, sender);
-
             this.setAccount(to);
             this.setAccount(sender);
         }

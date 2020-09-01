@@ -19,6 +19,7 @@ export class TXBlockchain {
 
     public readonly txBlocks = new CircularArray<TxBlock>();
     public readonly pendingTransactions = new CircularArray<Transaction>();
+    public numberOfTransactions = 0;
 
     public get getLastTXBlock() {
         return this.txBlocks.getLast();
@@ -43,6 +44,7 @@ export class TXBlockchain {
 
         this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
         this._storage.setNewTXBlock(minedBlock);
+        this.numberOfTransactions = minedBlock.transactions.size();
         this.pendingTransactions.reset();
 
         return minedBlock;

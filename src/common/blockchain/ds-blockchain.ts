@@ -19,6 +19,7 @@ export class DSBlockchain {
     private _version: BN;
 
     public dsBlocks = new CircularArray<DSBlock>();
+    public numberOfTransactions = 0;
 
     public get getLastDSBlock() {
         return this.dsBlocks.getLast();
