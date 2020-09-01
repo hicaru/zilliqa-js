@@ -23,11 +23,19 @@ export class Account {
     }
 
     public increaseBalance(amount: BN) {
-        this.balance.add(amount);
+        const _amount = new BN(amount);
+        const _balance = new BN(this.balance);
+        const _result = _balance.add(_amount);
+
+        this.balance = new BN(_result);
     }
 
     public reduceBalance(amount: BN) {
-        this.balance.sub(amount);
+        const _amount = new BN(amount);
+        const _balance = new BN(this.balance);
+        const _result = _balance.sub(_amount);
+
+        this.balance = new BN(_result);
     }
 
     public serialize() {

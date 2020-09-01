@@ -17,7 +17,7 @@ export abstract class Storage {
     abstract getDSBlock(blockNumber: number): DSBlock | null;
     abstract getTXBlock(blockNumber: number): TxBlock | null;
     abstract getTX(hash: string): Transaction | null;
-    abstract getAccount(adress: string): Account | null;
+    abstract getAccount(adress: string): Account;
 
     abstract setNewDSBlock(block: DSBlock): void;
     abstract setNewTXBlock(block: TxBlock): void;
@@ -97,14 +97,15 @@ export class MemmoryStorage extends Storage {
         const account = this._accounts.getItem(normalizedHex(address));
 
         if (!account) {
-            return null;
+            return new Account(address);
         }
 
         const parsed = JSON.parse(account);
         const foundAccount = new Account(
-            parsed.pubKey,
+            address,
             parsed.nonce,
-            parsed.balance
+            parsed.balance,
+            parsed.pubKey
         );
 
         return foundAccount;
@@ -125,25 +126,17 @@ export class MemmoryStorage extends Storage {
             const hash = hashSet[index];
             const tx = listOfTxns[hash];
             const amount = new BN(tx.amount);
-            const sender = tx.account;
+            const sender = this.getAccount(tx.account.address);
             const toAddress = normalizedHex(tx.toAddr);
-            const accountTo = this._accounts.getItem(toAddress);
-            let to: Account;
+            const to = this.getAccount(toAddress);
 
-            if (accountTo) {
-                const parsed = JSON.parse(accountTo);
-                const balance = new BN(parsed.balance);
-
-                to = new Account(toAddress, parsed.nonce, balance);
-            } else {
-                to = new Account(toAddress);
-            }
-
-            to.increaseBalance(amount);
             sender.reduceBalance(amount);
+            to.increaseBalance(amount);
             tx.asignBlock(blocNumber);
 
             this._txns.setItem(tx.hash, tx.serialize());
+
+            console.log(to, sender);
 
             this.setAccount(to);
             this.setAccount(sender);
@@ -153,6 +146,10 @@ export class MemmoryStorage extends Storage {
     }
 
     setAccount(account: Account) {
+        if (!account || !(account instanceof Account) || !account.address) {
+            throw new Error('Account is required');
+        }
+
         const address = normalizedHex(account.address);
 
         this._accounts.setItem(address, account.serialize());
