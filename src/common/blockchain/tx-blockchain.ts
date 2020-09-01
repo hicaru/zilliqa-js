@@ -43,6 +43,7 @@ export class TXBlockchain {
 
         this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
         this._storage.setNewTXBlock(minedBlock);
+        this.pendingTransactions.reset();
 
         return minedBlock;
     }
@@ -78,7 +79,7 @@ export class TXBlockchain {
                 newTxHeader
             );
 
-            newTxBlock.addTransactions(this.pendingTransactions);
+            newTxBlock.transactions = this.pendingTransactions;
 
             await this._mineTxBlock(newTxBlock);
         } catch (err) {

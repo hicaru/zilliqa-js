@@ -109,10 +109,4 @@ export class TxBlock extends BaseBlock {
 
         return validator(this.blockHash, this.difficulty);
     }
-
-    addTransactions(txns: CircularArray<Transaction>) {
-        const list = txns.list;
-
-        this.transactions.addList(list as any);
-    }
 }
