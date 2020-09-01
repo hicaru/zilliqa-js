@@ -5,7 +5,7 @@ import { internalError } from '../../errors';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const lastDsBlock = chain.getLastDSBlock;
+    const lastDsBlock = chain.dsBlockchain.getLastDSBlock;
 
     if (!lastDsBlock) {
         return res.json(internalError(body.id, body.jsonrpc, 'no found DsBlock.'));

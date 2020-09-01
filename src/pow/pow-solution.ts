@@ -26,6 +26,7 @@ export class PowSolution {
                     resolve(minedBlock);
 
                     clearInterval(interval);
+
                     console.info(
                         `${chalk.bold.greenBright(block.constructor.name)} 
                         ${chalk.cyan('block-number', block.blockHeader.blockNum)} 

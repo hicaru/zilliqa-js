@@ -5,15 +5,15 @@ import { internalError } from '../../errors';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const txBlock = chain.getLastTXBlock;
+    const result = chain.getNumTransactions;
 
-    if (!txBlock) {
-        return res.json(internalError(body.id, body.jsonrpc, 'no found txBlock.'));
+    if (!result) {
+        return res.json(internalError(body.id, body.jsonrpc, ''));
     }
 
     return res.json({
+        result,
         id: body.id,
-        jsonrpc: body.jsonrpc,
-        result: txBlock.transactions.size()
+        jsonrpc: body.jsonrpc
     });
 };

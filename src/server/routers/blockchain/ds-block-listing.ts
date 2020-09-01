@@ -6,7 +6,7 @@ import { paginate } from '../../../utils';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const lastDSBlock = chain.getLastDSBlock;
+    const lastDSBlock = chain.dsBlockchain.getLastDSBlock;
     let { params } = body;
 
     if (!lastDSBlock) {

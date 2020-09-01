@@ -7,8 +7,8 @@ export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
     const [id] = body.params;
-    const txBlock = chain.getTXBlock(Number(id));
-    const rootTxBlock = chain.getTXBlock(0);
+    const txBlock = chain.txBlockchain.getBlock(Number(id));
+    const rootTxBlock = chain.txBlockchain.getBlock(0);
 
     if (!txBlock || !rootTxBlock) {
         return res.json(internalError(body.id, body.jsonrpc, 'no found txBlock or rootTxBlock.'));

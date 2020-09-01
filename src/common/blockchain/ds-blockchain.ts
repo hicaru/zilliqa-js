@@ -8,7 +8,7 @@ import { PowSolution } from '../../pow';
 
 export class DSBlockchain {
     private _storage: Storage;
-    private _pow: PowSolution;
+    private _pow = new PowSolution();
 
     private _difficulty: number;
     private _dsDifficulty: number;
@@ -32,8 +32,7 @@ export class DSBlockchain {
         zeroHash: string,
         defaultMiner: string,
         defaultGasPrice: BN,
-        storage: Storage,
-        pow: PowSolution
+        storage: Storage
     ) {
         this._storage = storage;
         this._difficulty = difficulty;
@@ -43,7 +42,6 @@ export class DSBlockchain {
         this._genesisBlockNumber = genesisBlockNumber;
         this._defaultMiner = defaultMiner;
         this._defaultGasPrice = defaultGasPrice;
-        this._pow = pow;
     }
 
     /**
@@ -74,5 +72,15 @@ export class DSBlockchain {
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
         this._storage.setNewDSBlock(minedBlock);
+    }
+
+    public getBlock(blockNum: number) {
+        let foundDsBlock = this.dsBlocks.get(blockNum);
+
+        if (!foundDsBlock) {
+            foundDsBlock = this._storage.getDSBlock(blockNum);
+        }
+
+        return foundDsBlock;
     }
 }

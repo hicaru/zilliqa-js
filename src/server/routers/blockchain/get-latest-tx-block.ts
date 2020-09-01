@@ -6,8 +6,8 @@ import { ZERO_HASH } from '../../../config';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const txBlock = chain.getLastTXBlock;
-    const rootTxBlock = chain.getTXBlock(0);
+    const txBlock = chain.txBlockchain.getLastTXBlock;
+    const rootTxBlock = chain.txBlockchain.getBlock(0);
 
     if (!rootTxBlock || !txBlock) {
         return res.json(internalError(body.id, body.jsonrpc, 'no found rootTxBlock or txBlock.'));

@@ -5,7 +5,7 @@ import { internalError } from '../../errors';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const txBlock = chain.getLastTXBlock;
+    const txBlock = chain.txBlockchain.getLastTXBlock;
 
     if (!txBlock) {
         return res.json(internalError(body.id, body.jsonrpc, 'no found txBlock.'));
@@ -14,6 +14,6 @@ export default function(req: Request, res: Response) {
     return res.json({
         id: body.id,
         jsonrpc: body.jsonrpc,
-        result: txBlock.getHeader().blockNum
+        result: txBlock.getHeader().blockNum + 1
     });
 };

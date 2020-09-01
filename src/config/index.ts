@@ -9,6 +9,29 @@ export enum GasLimits {
     M = '100'
 }
 
+export enum TransactionStatuses {
+    TransactionIsNotPending = 0,
+    NonceIsHigherThanExpected = 1,
+    TransactionNotFound = 4,
+    TransactionCausedMathError = 10,
+    ScillaInvocationError = 11,
+    ContractAccountInitializationError = 12,
+    InvalidSourceAccount = 13,
+    GasLimitHigherThanShardGasLimit = 14,
+    UnknownTransactionType = 15,
+    TransactionSentToWrongShard = 16,
+    ContractSourceAccountCrossShardIssue = 17,
+    CodeSizeExceededLimit = 18,
+    TransactionVerificationFailed = 19,
+    GasLimitTooLow = 20,
+    InsufficientBalance = 21,
+    InsufficientGasToInvokeScillaChecker = 22,
+    DuplicateTransactionExists = 23,
+    TransactionWithHigherGasPriceExists = 24,
+    InvalidDestinationAddress = 25,
+    FailedToAddContractAccountToState = 26
+}
+
 export const HOME_DIR = `${os.homedir()}/zilliqa-store`;
 export const VERSION = new BN(1);
 export const CHAIN_ID = new BN(334);

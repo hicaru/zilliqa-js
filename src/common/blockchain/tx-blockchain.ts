@@ -9,12 +9,12 @@ import { GasLimits } from '../../config';
 import { Transaction, DSBlock } from '..';
 
 export class TXBlockchain {
-    private _storage: Storage;
-    private _pow: PowSolution;
+    private readonly _storage: Storage;
+    private readonly _pow = new PowSolution();
 
-    private _difficulty: number;
-    private _defaultMiner: string;
-    private _version: BN;
+    private readonly _difficulty: number;
+    private readonly _defaultMiner: string;
+    private readonly _version: BN;
 
     public txBlocks = new CircularArray<TxBlock>();
 
@@ -26,14 +26,29 @@ export class TXBlockchain {
         difficulty: number,
         version: BN,
         defaultMiner: string,
-        storage: Storage,
-        pow: PowSolution
+        storage: Storage
     ) {
         this._storage = storage;
         this._difficulty = difficulty;
         this._version = version;
         this._defaultMiner = defaultMiner;
-        this._pow = pow;
+
+        
+    }
+
+    private async _mineTxBlock(txBlock: TxBlock) {
+        txBlock.updateHash();
+
+        const minedBlock = await this._pow.mineBlock<TxBlock>(txBlock);
+
+        this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
+        this._storage.setNewTXBlock(minedBlock);
+
+        return minedBlock;
+    }
+
+    public init(genesisTxBlock: TxBlock) {
+        return this._mineTxBlock(genesisTxBlock);
     }
 
     /**
@@ -44,6 +59,11 @@ export class TXBlockchain {
     public async createTXBlock(dsBlock: DSBlock, pendingTxns: CircularArray<Transaction>) {
         try {
             const lastBlock = this.getLastTXBlock;
+
+            if (!lastBlock) {
+                throw new Error('Should be has got genesisTxBlock.');
+            }
+
             const newTxHeader = new TxBlockHeader(
                 this._version,
                 new BN(GasLimits.TX),
@@ -58,17 +78,22 @@ export class TXBlockchain {
                 newTxHeader
             );
 
-            newTxBlock.updateHash();
-
-            const minedBlock = await this._pow.mineBlock<TxBlock>(newTxBlock);
-
-            this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
-            this._storage.setNewTXBlock(minedBlock);
+            this._mineTxBlock(newTxBlock);
         } catch (err) {
             console.error(
                 chalk.redBright('error'),
                 chalk.red(err)
             );
         }
+    }
+
+    public getBlock(blockNum: number) {
+        let foundTxBlock = this.txBlocks.get(blockNum);
+
+        if (!foundTxBlock) {
+            foundTxBlock = this._storage.getTXBlock(blockNum);
+        }
+
+        return foundTxBlock;
     }
 }
