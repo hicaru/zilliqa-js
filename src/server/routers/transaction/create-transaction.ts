@@ -27,7 +27,7 @@ export default function(req: Request, res: Response) {
             attributes.priority
         );
     
-        chain.addTransaction(transaction);
+        chain.txBlockchain.addTransaction(transaction);
     
         return res.json({
             id: body.id,

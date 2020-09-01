@@ -1,2 +1,2 @@
 export * from './paginate';
-export * from './normalized-address';
+export * from './normalized-hex';

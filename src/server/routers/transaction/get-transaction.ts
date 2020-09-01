@@ -11,7 +11,7 @@ export default function(req: Request, res: Response) {
         return res.json(invalidParams(body.id, body.jsonrpc));
     }
 
-    const tx = chain.getTransaction(hash);
+    const tx = chain.txBlockchain.getTransaction(hash);
 
     return res.json({
         id: body.id,

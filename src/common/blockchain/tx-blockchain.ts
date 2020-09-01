@@ -7,6 +7,7 @@ import { CircularArray } from '../circular-array';
 import { PowSolution } from '../../pow';
 import { GasLimits } from '../../config';
 import { Transaction, DSBlock } from '..';
+import { normalizedHex } from '../../utils';
 
 export class TXBlockchain {
     private readonly _storage: Storage;
@@ -16,7 +17,8 @@ export class TXBlockchain {
     private readonly _defaultMiner: string;
     private readonly _version: BN;
 
-    public txBlocks = new CircularArray<TxBlock>();
+    public readonly txBlocks = new CircularArray<TxBlock>();
+    public readonly pendingTransactions = new CircularArray<Transaction>();
 
     public get getLastTXBlock() {
         return this.txBlocks.getLast();
@@ -32,8 +34,6 @@ export class TXBlockchain {
         this._difficulty = difficulty;
         this._version = version;
         this._defaultMiner = defaultMiner;
-
-        
     }
 
     private async _mineTxBlock(txBlock: TxBlock) {
@@ -78,6 +78,8 @@ export class TXBlockchain {
                 newTxHeader
             );
 
+            newTxBlock.addTransactions(this.pendingTransactions);
+
             await this._mineTxBlock(newTxBlock);
         } catch (err) {
             console.error(
@@ -95,5 +97,22 @@ export class TXBlockchain {
         }
 
         return foundTxBlock;
+    }
+
+    public addTransaction(transaction: Transaction) {
+        const hash = normalizedHex(transaction.hash);
+
+        this.pendingTransactions.add(transaction, hash);
+    }
+
+    public getTransaction(hash: string) {
+        const parsed = normalizedHex(hash);
+        let foundTx = this.pendingTransactions.get(parsed);
+
+        if (!foundTx) {
+            foundTx = this._storage.getTX(parsed);
+        }
+
+        return foundTx;
     }
 }

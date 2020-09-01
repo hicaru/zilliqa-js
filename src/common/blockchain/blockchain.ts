@@ -2,10 +2,7 @@ import BN from 'bn.js';
 import chalk from 'chalk';
 
 import { CircularArray } from '../circular-array';
-import { DSBlock, DSBlockHeader } from '../block';
-import { PowSolution } from '../../pow';
-import { GasLimits } from '../../config';
-import { TxBlock, TxBlockHeader } from '../block/tx-block';
+import { TxBlock } from '../block/tx-block';
 import { Transaction } from '../transaction';
 import { Storage } from '../../storage';
 import { WalletCtrl } from '../wallet';
@@ -134,20 +131,5 @@ export class BlockChain {
 
     public getAccount(address: string) {
         return this._storage.getAccount(address);
-    }
-
-    public addTransaction(transaction: Transaction) {
-        // this.pendingTxns.add(transaction, transaction.hash);
-    }
-
-    public getTransaction(hash: string) {
-        // const parsed = hash.toLowerCase().replace('0x', '');
-        // let foundTx = this.pendingTxns.get(parsed);
-
-        // if (!foundTx) {
-        //     foundTx = this._storage.getTX(parsed);
-        // }
-
-        // return foundTx;
     }
 }

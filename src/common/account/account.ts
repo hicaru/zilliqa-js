@@ -1,6 +1,6 @@
 import BN from 'bn.js';
 import { getAddressFromPublicKey } from '@zilliqa-js/crypto/dist/util';
-import { normalizedAddress } from '../../utils';
+import { normalizedHex } from '../../utils';
 
 export class Account {
     pubKey?: string;
@@ -10,7 +10,7 @@ export class Account {
     balance: BN = new BN(0);
 
     public static fromPubKey(pubKey: string, nonce?: number, balance?: BN) {
-        const address = normalizedAddress(getAddressFromPublicKey(pubKey));
+        const address = normalizedHex(getAddressFromPublicKey(pubKey));
 
         return new Account(address, nonce, balance, pubKey);
     }
@@ -19,7 +19,7 @@ export class Account {
         this.pubKey = pubKey;
         this.nonce = nonce;
         this.balance = balance;
-        this.address = normalizedAddress(address);
+        this.address = normalizedHex(address);
     }
 
     public increaseBalance(amount: BN) {

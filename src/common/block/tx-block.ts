@@ -5,6 +5,7 @@ import { BaseBlock, BaseBlockHeader } from './base-block';
 import { CircularArray } from '../circular-array';
 import { Transaction } from '../transaction';
 import { validator } from '../../crypto';
+import { TransactionStatuses } from '../../config';
 
 export class TxBlockHeader extends BaseBlockHeader {
     gasLimit: BN;
@@ -86,7 +87,7 @@ export class TxBlock extends BaseBlock {
         });
     }
 
-        /**
+    /**
      * Starts the mining process on the block. It changes the 'nonce' until the hash
      * of the block starts with enough zeros (= difficulty)
      */
@@ -107,5 +108,11 @@ export class TxBlock extends BaseBlock {
         }
 
         return validator(this.blockHash, this.difficulty);
+    }
+
+    addTransactions(txns: CircularArray<Transaction>) {
+        const list = txns.list;
+
+        this.transactions.addList(list as any);
     }
 }

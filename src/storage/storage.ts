@@ -9,7 +9,7 @@ import {
     TxBlockHeader
 } from '../common';
 import { HOME_DIR } from '../config';
-import { normalizedAddress } from '../utils';
+import { normalizedHex } from '../utils';
 
 export abstract class Storage {
     abstract get getTxnsLength(): number;
@@ -94,7 +94,7 @@ export class MemmoryStorage extends Storage {
     }
 
     getAccount(address: string) {
-        const account = this._accounts.getItem(normalizedAddress(address));
+        const account = this._accounts.getItem(normalizedHex(address));
 
         if (!account) {
             return null;
@@ -126,7 +126,7 @@ export class MemmoryStorage extends Storage {
             const tx = listOfTxns[hash];
             const amount = new BN(tx.amount);
             const sender = tx.account;
-            const toAddress = normalizedAddress(tx.toAddr);
+            const toAddress = normalizedHex(tx.toAddr);
             const accountTo = this._accounts.getItem(toAddress);
             let to: Account;
 
@@ -153,7 +153,7 @@ export class MemmoryStorage extends Storage {
     }
 
     setAccount(account: Account) {
-        const address = normalizedAddress(account.address);
+        const address = normalizedHex(account.address);
 
         this._accounts.setItem(address, account.serialize());
     }

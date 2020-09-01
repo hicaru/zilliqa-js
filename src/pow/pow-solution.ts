@@ -36,7 +36,7 @@ export class PowSolution {
                 } else {
                     minedBlock.blockHash = minedBlock.calculateHash();
                 }
-            }, 100 + block.difficulty);
+            }, 1000 + block.difficulty);
         });
     }
 }
