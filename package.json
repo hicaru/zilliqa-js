@@ -1,5 +1,5 @@
 {
-  "name": "zilliqa-js",
+  "name": "zilliqa-js-implementation",
   "version": "0.0.1",
   "description": "Zilliqa blockchain implementation on javascript.",
   "main": "dist/index.js",
