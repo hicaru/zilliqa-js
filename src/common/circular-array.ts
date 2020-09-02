@@ -28,6 +28,19 @@ export class CircularArray<T> {
         this.items = {};
     }
 
+    clear() {
+        const last = this.getLast();
+        const lastnumber = this.getLastnumber();
+
+        if (!last) {
+            return null;
+        }
+
+        this.items = {
+            [lastnumber]: last
+        }
+    }
+
     size(): number {
         return Object.keys(this.items).length;
     }

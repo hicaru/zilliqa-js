@@ -113,20 +113,25 @@ export class BlockChain {
         await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
 
         while (this._isRunniong) {
-            if (this.txBlockchain.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
-                await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
-
-                this.txBlockchain.txBlocks.reset();
-                this.dsBlockchain.numberOfTransactions = 0;
+            try {
+                if (this.txBlockchain.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
+                    await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
+    
+                    this.txBlockchain.txBlocks.clear();
+                    this.dsBlockchain.numberOfTransactions = 0;
+                }
+    
+                if (!this.dsBlockchain.getLastDSBlock) {
+                    continue;
+                }
+    
+                await this.txBlockchain.createTXBlock(this.dsBlockchain.getLastDSBlock);
+    
+                this.dsBlockchain.numberOfTransactions += this.txBlockchain.numberOfTransactions;
+            } catch (err) {
+                this.stop();
+                break;
             }
-
-            if (!this.dsBlockchain.getLastDSBlock) {
-                continue;
-            }
-
-            await this.txBlockchain.createTXBlock(this.dsBlockchain.getLastDSBlock);
-
-            this.dsBlockchain.numberOfTransactions += this.txBlockchain.numberOfTransactions;
         }
     }
 
