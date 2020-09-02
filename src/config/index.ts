@@ -44,7 +44,7 @@ export const DEFAULT_GAS_PRICE = new BN('1000000000');
 export const PORT = 80;
 export const TX_BLOCKS_PEAR_DS_BLOCK = 100;
 
-export const AMOUNT_OF_ACCOUNTS = 10;
+export const AMOUNT_OF_ACCOUNTS = 1;
 export const INITIAL_BALANCE = new BN('10000000000000000000');
 
 export const DEFAULT_SW_INFO = new SWInfo();

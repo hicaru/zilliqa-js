@@ -3,7 +3,6 @@ import { HTTPProvider } from '@zilliqa-js/core';
 
 import { Account } from './account';
 import { AMOUNT_OF_ACCOUNTS, INITIAL_BALANCE } from '../config';
-import BN from 'bn.js';
 
 export class WalletCtrl {
     public wallet = new Wallet(new HTTPProvider(''));
