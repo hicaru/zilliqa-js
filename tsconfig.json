@@ -12,6 +12,7 @@
         "moduleResolution": "node",
         "baseUrl": ".",
         "esModuleInterop": true,
+        "declaration": true,
         /* Advanced Options */
         "skipLibCheck": true,
         "forceConsistentCasingInFileNames": true,
