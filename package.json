@@ -2,15 +2,16 @@
   "name": "zilliqa-js",
   "version": "0.0.1",
   "description": "Zilliqa blockchain implementation on javascript.",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "types": "typings/index.d.ts",
   "typings": "typings/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "npx ts-node --project tsconfig.json index.ts",
-    "build": "npx tsc",
+    "build": "npm run clean && npx tsc",
     "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts",
     "type-check": "tsc",
+    "clean": "rm -rf dist",
     "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}'",
     "precommit": "npm run lint && npm run type-check"
   },
