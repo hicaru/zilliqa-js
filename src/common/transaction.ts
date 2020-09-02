@@ -165,12 +165,20 @@ export class Transaction {
             const publicKey = Buffer.from(this.pubKey, 'hex');
             const signature = schnorr.toSignature(this.signature);
 
-            return schnorr.verify(
+            const isValid =  schnorr.verify(
                 this._bytes,
                 signature,
                 publicKey
             );
+
+            if (!isValid) {
+                this.status = TransactionStatuses.TransactionVerificationFailed;
+            }
+
+            return isValid;
         } catch {
+            this.status = TransactionStatuses.TransactionVerificationFailed;
+
             return false;
         }
     }
