@@ -38,6 +38,10 @@ export class Account {
         this.balance = new BN(_result);
     }
 
+    public increaseNonce() {
+        this.nonce++;
+    }
+
     public serialize() {
         return JSON.stringify({
             nonce: this.nonce,

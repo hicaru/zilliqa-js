@@ -8,7 +8,7 @@ import {
     Account,
     TxBlockHeader
 } from '../common';
-import { HOME_DIR } from '../config';
+import { HOME_DIR, TransactionStatuses } from '../config';
 import { normalizedHex } from '../utils';
 
 export abstract class Storage {
@@ -131,8 +131,15 @@ export class MemmoryStorage extends Storage {
             const to = this.getAccount(toAddress);
 
             sender.reduceBalance(amount);
+            sender.increaseNonce();
             to.increaseBalance(amount);
             tx.asignBlock(blocNumber);
+            tx.receipt = {
+                success: true,
+                cumulative_gas: '1',
+                epoch_num: String(blocNumber)
+            }
+            tx.statusUpdate(TransactionStatuses.TransactionIsNotPending);
 
             this._txns.setItem(tx.hash, tx.serialize());
 
