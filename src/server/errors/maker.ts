@@ -12,7 +12,7 @@ export function invalidParams(id: string = '1', jsonrpc: string = '2.0', data: o
     }
 }
 
-export function internalError(id: string = '1', jsonrpc: string = '2.0', msg: string, data = null) {
+export function internalError(id: string = '1', jsonrpc: string = '2.0', msg: string = '', data = null) {
     return {
         id,
         jsonrpc,
