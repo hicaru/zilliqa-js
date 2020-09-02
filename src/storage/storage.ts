@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import fs from 'fs';
+import * as fs from 'fs';
 import { LocalStorage } from 'node-localstorage';
 import {
     DSBlock,
