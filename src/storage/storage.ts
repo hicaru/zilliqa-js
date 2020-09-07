@@ -130,21 +130,23 @@ export class MemmoryStorage extends Storage {
             const toAddress = normalizedHex(tx.toAddr);
             const to = this.getAccount(toAddress);
 
-            sender.reduceBalance(amount);
-            sender.increaseNonce();
-            to.increaseBalance(amount);
-            tx.asignBlock(blocNumber);
-            tx.receipt = {
-                success: true,
-                cumulative_gas: '1',
-                epoch_num: String(blocNumber)
+            if (!tx.status) {
+                sender.reduceBalance(amount);
+                sender.increaseNonce();
+                to.increaseBalance(amount);
+                tx.asignBlock(blocNumber);
+                tx.receipt = {
+                    success: true,
+                    cumulative_gas: '1',
+                    epoch_num: String(blocNumber)
+                }
+                tx.statusUpdate(TransactionStatuses.TransactionIsNotPending);
+
+                this._txns.setItem(tx.hash, tx.serialize());
+
+                this.setAccount(to);
+                this.setAccount(sender);   
             }
-            tx.statusUpdate(TransactionStatuses.TransactionIsNotPending);
-
-            this._txns.setItem(tx.hash, tx.serialize());
-
-            this.setAccount(to);
-            this.setAccount(sender);
         }
 
         this._txBlocks.setItem(String(blocNumber), block.serialize());

@@ -100,7 +100,7 @@ export class DSBlock extends BaseBlock {
             const txBlock = this.txBlocks.list[key];
 
             if (!txBlock.isValid()) {
-                return false;
+                this.txBlocks.rm(key);
             }
         }
 

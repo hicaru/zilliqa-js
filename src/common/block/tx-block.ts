@@ -102,9 +102,7 @@ export class TxBlock extends BaseBlock {
             const hash = hashs[index];
             const tx = this.transactions.list[hash];
 
-            if (!tx.isValid()) {
-                this.transactions.rm(hash);
-            }
+            tx.isValid();
         }
 
         return validator(this.blockHash, this.difficulty);
