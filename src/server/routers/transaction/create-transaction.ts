@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { getAddressFromPublicKey } from '@zilliqa-js/crypto/dist/util';
 import { BlockChain, Transaction } from '../../../common';
 import { invalidParams, unableToVerifyTransaction } from '../../errors';
 
@@ -13,6 +14,8 @@ export default function(req: Request, res: Response) {
     const chain = req.app.settings.chain as BlockChain;
 
     try {
+        const address = getAddressFromPublicKey(attributes.pubKey);
+        const account = chain.getAccount(address);
         const transaction = new Transaction(
             attributes.version,
             attributes.nonce,

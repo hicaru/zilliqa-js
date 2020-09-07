@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import { BlockChain } from '../../../common';
-import { internalError, invalidParams } from '../../errors';
+import { invalidParams } from '../../errors';
+import { ZERO_HASH } from '../../../config';
 
 export default function(req: Request, res: Response) {
     const { body } = req;
@@ -13,7 +14,23 @@ export default function(req: Request, res: Response) {
     }
 
     if (!dsBlock) {
-        return res.json(internalError(body.id, body.jsonrpc, 'no found DsBlock.'));
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            result: {
+                header: {
+                    BlockNum: '18446744073709551615',
+                    Difficulty: 0,
+                    DifficultyDS: 0,
+                    GasPrice: '0',
+                    LeaderPubKey: '0x' + ZERO_HASH,
+                    PoWWinners: [],
+                    PrevHash: ZERO_HASH,
+                    Timestamp: '0'
+                  },
+                  signature: ZERO_HASH
+            }
+        });
     }
 
     return res.json({
