@@ -17,6 +17,12 @@ export class CircularArray<T> {
         this.items[key] = item;
     }
 
+    rm(key: number | string) {
+        if (key in this.items) {
+            delete this.items[key]
+        }
+    }
+
     addList(items: T) {
         this.items = {
             ...this.items,

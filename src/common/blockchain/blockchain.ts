@@ -129,6 +129,7 @@ export class BlockChain {
     
                 this.dsBlockchain.numberOfTransactions += this.txBlockchain.numberOfTransactions;
             } catch (err) {
+                console.log(chalk.redBright(err));
                 this.stop();
                 break;
             }

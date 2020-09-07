@@ -103,7 +103,7 @@ export class TxBlock extends BaseBlock {
             const tx = this.transactions.list[hash];
 
             if (!tx.isValid()) {
-                return false;
+                this.transactions.rm(hash);
             }
         }
 
