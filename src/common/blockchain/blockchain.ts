@@ -29,6 +29,8 @@ export class BlockChain {
     readonly defaultGasPrice: BN;
     readonly version: BN;
 
+    public numTxnsDSEpoch = 0;
+
     public get numTxBlocks() {
         const lastBlock = this.txBlockchain.getLastTXBlock;
 
@@ -117,6 +119,8 @@ export class BlockChain {
                 if (this.txBlockchain.txBlocks.size() >= this.amountTxBlocksPearDSBlock) {
                     await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
     
+                    this.numTxnsDSEpoch = this.txBlockchain.txBlocks.size();
+                    
                     this.txBlockchain.txBlocks.clear();
                     this.dsBlockchain.numberOfTransactions = 0;
                 }

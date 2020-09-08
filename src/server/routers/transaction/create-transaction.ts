@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import { getAddressFromPublicKey } from '@zilliqa-js/crypto/dist/util';
 import { BlockChain, Transaction } from '../../../common';
-import { invalidParams, unableToVerifyTransaction, RPCErrorCode } from '../../errors';
+import { invalidParams, unableToVerifyTransaction, RPCErrorCode, notSupport } from '../../errors';
 
 export default function(req: Request, res: Response) {
     const { body } = req;
@@ -29,6 +29,10 @@ export default function(req: Request, res: Response) {
             attributes.signature,
             attributes.priority
         );
+
+        if (transaction.code || transaction.data) {
+            return res.json(notSupport(body.id, body.jsonrpc, body.method));
+        }
 
         if (account.nonce >= transaction.nonce) {
             return res.json({
