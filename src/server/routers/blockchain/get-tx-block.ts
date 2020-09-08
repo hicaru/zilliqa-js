@@ -18,6 +18,26 @@ export default function(req: Request, res: Response) {
         return res.json(invalidParams(body.id, body.jsonrpc));
     }
 
+    if (!txBlock) {
+        return res.json({
+            id: body.id,
+            jsonrpc: body.jsonrpc,
+            result: {
+                header: {
+                    BlockNum: '18446744073709551615',
+                    Difficulty: 0,
+                    DifficultyDS: 0,
+                    GasPrice: '0',
+                    LeaderPubKey: '0x' + ZERO_HASH,
+                    PoWWinners: [],
+                    PrevHash: ZERO_HASH,
+                    Timestamp: '0'
+                  },
+                  signature: ZERO_HASH
+            }
+        });
+    }
+
     return res.json({
         id: body.id,
         jsonrpc: body.jsonrpc,

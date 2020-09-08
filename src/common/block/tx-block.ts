@@ -78,12 +78,15 @@ export class TxBlock extends BaseBlock {
 
         return JSON.stringify({
             transactions,
+            version: this.getHeader().version.toString(),
             timestamp: this.timestamp,
             difficulty: this.difficulty,
-            gasLimit: header.gasLimit,
+            gasLimit: header.gasLimit.toString(),
             minerPubKey: header.minerPubKey,
             numTxs: this.transactions.size(),
-            dsBlockNum: header.dsBlockNum
+            dsBlockNum: header.dsBlockNum,
+            prevHash: this.getHeader().prevHash,
+            blockNum: this.getHeader().blockNum
         });
     }
 

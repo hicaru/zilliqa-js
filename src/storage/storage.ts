@@ -63,14 +63,13 @@ export class MemmoryStorage extends Storage {
         }
 
         const txBlock = JSON.parse(foundTXBlock);
-
         const header = new TxBlockHeader(
-            new BN(txBlock.blockHeader.version),
-            new BN(Number(`0x${txBlock.blockHeader.gasLimit}`)),
-            txBlock.blockHeader.blockNum,
-            txBlock.blockHeader.prevHash,
-            txBlock.blockHeader.minerPubKey,
-            txBlock.blockHeader.dsBlockNum
+            new BN(txBlock.version),
+            new BN(txBlock.gasLimit),
+            txBlock.blockNum,
+            txBlock.prevHash,
+            txBlock.minerPubKey,
+            txBlock.dsBlockNum
         );
         const block = new TxBlock(
             txBlock.timestamp,
