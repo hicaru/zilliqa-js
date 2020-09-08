@@ -86,7 +86,8 @@ export class TxBlock extends BaseBlock {
             numTxs: this.transactions.size(),
             dsBlockNum: header.dsBlockNum,
             prevHash: this.getHeader().prevHash,
-            blockNum: this.getHeader().blockNum
+            blockNum: this.getHeader().blockNum,
+            hashPool: Object.keys(this.transactions.list)
         });
     }
 
