@@ -78,6 +78,7 @@ export class TxBlock extends BaseBlock {
 
         return JSON.stringify({
             transactions,
+            blockHash: this.blockHash,
             version: this.getHeader().version.toString(),
             timestamp: this.timestamp,
             difficulty: this.difficulty,

@@ -77,6 +77,7 @@ export class MemmoryStorage extends Storage {
             header
         );
 
+        block.blockHash = txBlock.blockHash;
         block.transactions = txBlock.hashPool;
 
         return block;

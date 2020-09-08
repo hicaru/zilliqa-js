@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { BlockChain } from '../../../common';
+import { BlockChain, CircularArray } from '../../../common';
 import { internalError, invalidParams } from '../../errors';
 import { ZERO_HASH } from '../../../config';
 
@@ -9,6 +9,7 @@ export default function(req: Request, res: Response) {
     const [id] = body.params;
     const txBlock = chain.txBlockchain.getBlock(Number(id));
     const rootTxBlock = chain.txBlockchain.getBlock(0);
+    let numTxns = 0;
 
     if (!txBlock || !rootTxBlock) {
         return res.json(internalError(body.id, body.jsonrpc, 'no found txBlock or rootTxBlock.'));
@@ -38,6 +39,12 @@ export default function(req: Request, res: Response) {
         });
     }
 
+    if (txBlock.transactions instanceof CircularArray) {
+        numTxns = txBlock.transactions.size();
+    } else {
+        numTxns = (txBlock.transactions as any).length;
+    }
+
     return res.json({
         id: body.id,
         jsonrpc: body.jsonrpc,
@@ -55,7 +62,7 @@ export default function(req: Request, res: Response) {
                 MbInfoHash: ZERO_HASH,
                 MinerPubKey: txBlock.getHeader().minerPubKey,
                 NumMicroBlocks: 0,
-                NumTxns: txBlock.transactions.size(),
+                NumTxns: numTxns,
                 PrevBlockHash: txBlock.getHeader().prevHash,
                 Rewards: "0",
                 StateDeltaHash: ZERO_HASH,
