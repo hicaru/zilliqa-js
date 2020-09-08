@@ -120,15 +120,16 @@ export class BlockChain {
                     await this.dsBlockchain.createDSBlock(this.txBlockchain.txBlocks);
     
                     this.numTxnsDSEpoch = this.txBlockchain.txBlocks.size();
-                    
+
                     this.txBlockchain.txBlocks.clear();
+                    this.dsBlockchain.dsBlocks.clear();
                     this.dsBlockchain.numberOfTransactions = 0;
                 }
     
                 if (!this.dsBlockchain.getLastDSBlock) {
                     continue;
                 }
-    
+
                 await this.txBlockchain.createTXBlock(this.dsBlockchain.getLastDSBlock);
     
                 this.dsBlockchain.numberOfTransactions += this.txBlockchain.numberOfTransactions;

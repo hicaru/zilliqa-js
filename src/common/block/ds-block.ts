@@ -35,13 +35,13 @@ export class DSBlock extends BaseBlock {
     static deserialize(json: string) {
         const dsBlock = JSON.parse(json);
         const header = new DSBlockHeader(
-            new BN(dsBlock.blockHeader.version),
-            dsBlock.blockHeader.prevHash,
-            dsBlock.blockHeader.blockNum,
-            dsBlock.blockHeader.dsDifficulty,
-            dsBlock.blockHeader.difficulty,
-            dsBlock.blockHeader.leaderPubKey,
-            new BN(dsBlock.blockHeader.gasPrice, 16)
+            new BN(dsBlock.version),
+            dsBlock.prevHash,
+            dsBlock.blockNum,
+            dsBlock.dsDifficulty,
+            dsBlock.difficulty,
+            dsBlock.leaderPubKey,
+            new BN(dsBlock.gasPrice)
         );
 
         const ds = new DSBlock(
@@ -50,7 +50,7 @@ export class DSBlock extends BaseBlock {
             header
         );
 
-        ds.txBlocks.addList(dsBlock.txBlocks.items);
+        ds.txBlocks = dsBlock.txBlocks;
         ds.blockHash = dsBlock.blockHash;
 
         return ds;
@@ -75,6 +75,10 @@ export class DSBlock extends BaseBlock {
 
         return JSON.stringify({
             txBlocks,
+            blockHash: String(this.blockHash),
+            blockNum: header.blockNum,
+            prevHash: header.prevHash,
+            version: header.version,
             timestamp: this.timestamp,
             difficulty: this.difficulty,
             dsDifficulty: header.dsDifficulty,

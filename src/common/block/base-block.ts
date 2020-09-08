@@ -89,7 +89,7 @@ export class BaseBlock {
      * @returns {string} The hash of the block.
      */
     calculateHash(): string {
-        const serializeBlock = this.serialize();
+        const serializeBlock = this.getHeader().serialize();
         const buf = Buffer.from(serializeBlock);
         const sha256HashSum = sha256()
             .update(buf)
