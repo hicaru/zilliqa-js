@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { BlockChain } from '../../../common';
 import { RPCErrorCode, invalidParams, internalError } from '../../errors';
 import { paginate } from '../../../utils';
+import BN from 'bn.js';
 
 export default function(req: Request, res: Response) {
     const amountOfResult = 11;
@@ -22,7 +23,9 @@ export default function(req: Request, res: Response) {
     try {
         const lastDsBlockNumber = lastDSBlock.getHeader().blockNum;
         const first = lastDsBlockNumber >= amountOfResult ? lastDsBlockNumber - amountOfResult : 0;
-        const maxPages = first + amountOfResult;
+        const maxPages = (
+            new BN(lastDsBlockNumber).div(new BN(amountOfResult))
+        ).toNumber();
     
         for (let index = first; index < first + amountOfResult; index++) {
             const dsBlock = chain.dsBlockchain.getBlock(index);
