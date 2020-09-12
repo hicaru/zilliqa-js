@@ -1,5 +1,5 @@
 import BN from 'bn.js';
-import * as fs from 'fs';
+import rimraf from 'rimraf';
 import { LocalStorage } from 'node-localstorage';
 import {
     DSBlock,
@@ -37,7 +37,7 @@ export class MemmoryStorage extends Storage {
     constructor() {
         super();
 
-        fs.rmdirSync(HOME_DIR, { recursive: true });
+        rimraf.sync(HOME_DIR);
 
         this._txns = new LocalStorage(`${HOME_DIR}/txns`);
         this._txBlocks = new LocalStorage(`${HOME_DIR}/tx-blocks`);

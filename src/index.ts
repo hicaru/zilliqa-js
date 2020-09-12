@@ -15,22 +15,36 @@ import {
 import App from './server';
 import { MemmoryStorage } from './storage';
 
-export function main() {
-    const mnemonic = generateMnemonic();
-    const storage = new MemmoryStorage();
+const mnemonic = generateMnemonic();
+const storage = new MemmoryStorage();
+
+export function main(
+    txblockPerDs = TX_BLOCKS_PEAR_DS_BLOCK,
+    difficulty = DIFFICULTY,
+    dsDifficulty = DS_DIFFICULTY,
+    version = VERSION,
+    genesisTxblock = GENESIS_TX_BLOCK,
+    genesisBlockNumber = GENESIS_BLOCK_NUMBER,
+    zeroHash = ZERO_HASH,
+    miner = MINER_PUBKEY,
+    defaultGasPrice = DEFAULT_GAS_PRICE,
+    chainID = CHAIN_ID,
+    store = storage,
+    initSeed = mnemonic
+) {
     const chain = new BlockChain(
-        TX_BLOCKS_PEAR_DS_BLOCK,
-        DIFFICULTY,
-        DS_DIFFICULTY,
-        VERSION,
-        GENESIS_TX_BLOCK,
-        GENESIS_BLOCK_NUMBER,
-        ZERO_HASH,
-        MINER_PUBKEY,
-        DEFAULT_GAS_PRICE,
-        CHAIN_ID,
-        storage,
-        mnemonic
+        txblockPerDs,
+        difficulty,
+        dsDifficulty,
+        version,
+        genesisTxblock,
+        genesisBlockNumber,
+        zeroHash,
+        miner,
+        defaultGasPrice,
+        chainID,
+        store,
+        initSeed
     );
 
     chain.start();
@@ -38,3 +52,8 @@ export function main() {
     // Starting jsonRPC server.
     App(chain);
 }
+
+export * from './config';
+export * from './common';
+export * from './server';
+export * from './storage';
