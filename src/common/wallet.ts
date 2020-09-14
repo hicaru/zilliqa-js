@@ -14,6 +14,10 @@ export class WalletCtrl {
             .map((account) => this._toAddress(account.address));
     }
 
+    get keys() {
+        return this.wallet.accounts;
+    }
+
     constructor(mnemonic: string) {
         this.mnemonic = mnemonic;
 

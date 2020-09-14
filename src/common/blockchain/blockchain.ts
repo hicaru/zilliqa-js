@@ -47,6 +47,10 @@ export class BlockChain {
         return this._storage.getTxnsLength;
     }
 
+    public get accounts() {
+        return this._wallet.keys;
+    }
+
     constructor(
         amountTxBlocksPearDSBlock: number,
         difficulty: number,
