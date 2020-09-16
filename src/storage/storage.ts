@@ -22,6 +22,8 @@ export abstract class Storage {
     abstract setNewDSBlock(block: DSBlock): void;
     abstract setNewTXBlock(block: TxBlock): void;
     abstract setAccount(account: Account): void;
+
+    abstract resetDir(): void
 }
 
 export class MemmoryStorage extends Storage {
@@ -37,12 +39,16 @@ export class MemmoryStorage extends Storage {
     constructor() {
         super();
 
-        rimraf.sync(HOME_DIR);
+        this.resetDir()
 
         this._txns = new LocalStorage(`${HOME_DIR}/txns`);
         this._txBlocks = new LocalStorage(`${HOME_DIR}/tx-blocks`);
         this._dsBlocks = new LocalStorage(`${HOME_DIR}/ds-blocks`);
         this._accounts = new LocalStorage(`${HOME_DIR}/accounts`);
+    }
+
+    resetDir() {
+        rimraf.sync(HOME_DIR);
     }
 
     getDSBlock(blockNumber: number) {

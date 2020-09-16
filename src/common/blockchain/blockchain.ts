@@ -94,14 +94,6 @@ export class BlockChain {
             defaultMiner,
             this._storage
         );
-
-        const genesisAccounts = this._wallet.initAccounts();
-
-        for (let index = 0; index < genesisAccounts.length; index++) {
-            const account = genesisAccounts[index];
-
-            this._storage.setAccount(account);
-        }
     }
 
     public async start() {
@@ -112,6 +104,14 @@ export class BlockChain {
         console.log(
             chalk.yellowBright('staring blocks mining...')
         );
+
+        const genesisAccounts = this._wallet.initAccounts();
+
+        for (let index = 0; index < genesisAccounts.length; index++) {
+            const account = genesisAccounts[index];
+
+            this._storage.setAccount(account);
+        }
 
         this._isRunniong = true;
 
@@ -147,6 +147,14 @@ export class BlockChain {
 
     public stop() {
         this._isRunniong = false;
+    }
+
+    public restart() {
+        this.stop();
+        this._storage.resetDir();
+        this.txBlockchain.txBlocks.reset();
+        this.dsBlockchain.dsBlocks.reset();
+        this.start();
     }
 
     public getAccount(address: string) {
