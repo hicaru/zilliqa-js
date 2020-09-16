@@ -1,5 +1,6 @@
 import { generateMnemonic } from 'bip39';
-import { BlockChain } from './common';
+import BN from 'bn.js';
+import { BlockChain, TxBlock, TxBlockHeader } from './common';
 import {
     DIFFICULTY,
     DS_DIFFICULTY,
@@ -10,7 +11,7 @@ import {
     MINER_PUBKEY,
     CHAIN_ID,
     DEFAULT_GAS_PRICE,
-    TX_BLOCKS_PEAR_DS_BLOCK
+    TX_BLOCKS_PEAR_DS_BLOCK, GasLimits
 } from './config';
 import App from './server';
 import { MemmoryStorage } from './storage';
@@ -51,6 +52,23 @@ export function main(
     
     // Starting jsonRPC server.
     App(chain);
+
+    setTimeout(() => {
+        chain.genesisBlockNumber = 10;
+        chain.genesisTxBlock = new TxBlock(
+            new Date().valueOf(),
+            DIFFICULTY,
+            new TxBlockHeader(
+                VERSION,
+                new BN(GasLimits.TX),
+                chain.genesisBlockNumber,
+                ZERO_HASH,
+                MINER_PUBKEY,
+                chain.genesisBlockNumber
+            )
+        );
+        chain.restart()
+    }, 5000);
 }
 
 export * from './config';

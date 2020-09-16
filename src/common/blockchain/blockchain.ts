@@ -10,24 +10,24 @@ import { DSBlockchain } from './ds-blockchain';
 import { TXBlockchain } from './tx-blockchain';
 
 export class BlockChain {
-    private readonly _storage: Storage;
     private readonly _wallet: WalletCtrl;
+    private readonly _storage: Storage;
 
     readonly dsBlockchain: DSBlockchain;
     readonly txBlockchain: TXBlockchain;
 
     private _isRunniong = false;
 
-    readonly genesisTxBlock: TxBlock;
-    readonly difficulty: number;
-    readonly dsDifficulty: number;
-    readonly genesisBlockNumber: number;
-    readonly chainId: BN;
-    readonly zeroHash: string;
-    readonly amountTxBlocksPearDSBlock: number;
-    readonly defaultMiner: string;
-    readonly defaultGasPrice: BN;
-    readonly version: BN;
+    genesisTxBlock: TxBlock;
+    difficulty: number;
+    dsDifficulty: number;
+    genesisBlockNumber: number;
+    chainId: BN;
+    zeroHash: string;
+    amountTxBlocksPearDSBlock: number;
+    defaultMiner: string;
+    defaultGasPrice: BN;
+    version: BN;
 
     public numTxnsDSEpoch = 0;
 
@@ -142,6 +142,10 @@ export class BlockChain {
                 this.stop();
                 break;
             }
+
+            if (!this._isRunniong) {
+                break;
+            }
         }
     }
 
@@ -151,10 +155,20 @@ export class BlockChain {
 
     public restart() {
         this.stop();
-        this._storage.resetDir();
-        this.txBlockchain.txBlocks.reset();
-        this.dsBlockchain.dsBlocks.reset();
-        this.start();
+
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                try {
+                    this.txBlockchain.txBlocks.reset();
+                    this.dsBlockchain.dsBlocks.reset();
+                    this.start();
+
+                    return resolve(true);
+                } catch (err) {
+                    return reject(err);
+                }
+            }, 1000);
+        });
     }
 
     public getAccount(address: string) {
