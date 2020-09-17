@@ -52,23 +52,6 @@ export function main(
     
     // Starting jsonRPC server.
     App(chain);
-
-    setTimeout(() => {
-        chain.genesisBlockNumber = 10;
-        chain.genesisTxBlock = new TxBlock(
-            new Date().valueOf(),
-            DIFFICULTY,
-            new TxBlockHeader(
-                VERSION,
-                new BN(GasLimits.TX),
-                chain.genesisBlockNumber,
-                ZERO_HASH,
-                MINER_PUBKEY,
-                chain.genesisBlockNumber
-            )
-        );
-        chain.restart()
-    }, 5000);
 }
 
 export * from './config';

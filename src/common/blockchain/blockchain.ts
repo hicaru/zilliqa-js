@@ -1,13 +1,12 @@
 import BN from 'bn.js';
 import chalk from 'chalk';
 
-import { CircularArray } from '../circular-array';
 import { TxBlock } from '../block/tx-block';
-import { Transaction } from '../transaction';
 import { Storage } from '../../storage';
 import { WalletCtrl } from '../wallet';
 import { DSBlockchain } from './ds-blockchain';
 import { TXBlockchain } from './tx-blockchain';
+import { ChainEvent } from './emiter';
 
 export class BlockChain {
     private readonly _wallet: WalletCtrl;
@@ -15,6 +14,7 @@ export class BlockChain {
 
     readonly dsBlockchain: DSBlockchain;
     readonly txBlockchain: TXBlockchain;
+    readonly emitter: ChainEvent;
 
     private _isRunniong = false;
 
@@ -94,6 +94,7 @@ export class BlockChain {
             defaultMiner,
             this._storage
         );
+        this.emitter = new ChainEvent();
     }
 
     public async start() {
@@ -128,6 +129,7 @@ export class BlockChain {
                     this.txBlockchain.txBlocks.clear();
                     this.dsBlockchain.dsBlocks.clear();
                     this.dsBlockchain.numberOfTransactions = 0;
+                    this.emitter.emit(this.emitter.types.dsBlock);
                 }
     
                 if (!this.dsBlockchain.getLastDSBlock) {
@@ -137,8 +139,10 @@ export class BlockChain {
                 await this.txBlockchain.createTXBlock(this.dsBlockchain.getLastDSBlock);
     
                 this.dsBlockchain.numberOfTransactions += this.txBlockchain.numberOfTransactions;
+                this.emitter.emit(this.emitter.types.txBlock);
             } catch (err) {
                 console.log(chalk.redBright(err));
+                this.emitter.emit(this.emitter.types.error);
                 this.stop();
                 break;
             }
