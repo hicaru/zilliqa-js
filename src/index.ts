@@ -16,7 +16,7 @@ import {
 import App from './server';
 import { MemmoryStorage } from './storage';
 
-const mnemonic = 'abstract silly element program name ten champion thing odor nerve wasp smooth'// generateMnemonic();
+const mnemonic = generateMnemonic();
 const storage = new MemmoryStorage();
 
 export function main(
