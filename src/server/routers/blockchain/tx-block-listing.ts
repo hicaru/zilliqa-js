@@ -8,7 +8,7 @@ export default function(req: Request, res: Response) {
     const amountOfResult = 11;
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const lastTxBlock = chain.txBlockchain.getLastTXBlock;
+    const lastTxBlock = chain.txBlockchain.lastblock;
     let { params } = body;
     let data = [];
 

@@ -5,7 +5,7 @@ import { internalError } from '../../errors';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const lastTxBlock = chain.txBlockchain.getLastTXBlock;
+    const lastTxBlock = chain.txBlockchain.lastblock;
 
     return res.json({
         id: body.id,

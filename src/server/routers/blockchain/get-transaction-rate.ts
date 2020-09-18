@@ -5,7 +5,7 @@ import { BlockChain } from '../../../common';
 export default function(req: Request, res: Response) {
     const { body } = req;
     // const chain = req.app.settings.chain as BlockChain;
-    // const txBlock = chain.getLastTXBlock;
+    // const txBlock = chain.lastblock;
 
     // if (!txBlock) {
     //     return res.json({

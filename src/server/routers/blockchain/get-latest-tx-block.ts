@@ -6,7 +6,7 @@ import { ZERO_HASH } from '../../../config';
 export default function(req: Request, res: Response) {
     const { body } = req;
     const chain = req.app.settings.chain as BlockChain;
-    const txBlock = chain.txBlockchain.getLastTXBlock;
+    const txBlock = chain.txBlockchain.lastblock;
     const rootTxBlock = chain.txBlockchain.getBlock(0);
 
     if (!rootTxBlock || !txBlock) {

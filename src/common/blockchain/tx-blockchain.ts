@@ -1,5 +1,6 @@
 import BN from 'bn.js';
 import chalk from 'chalk';
+import _ from 'lodash';
 
 import { TxBlock, TxBlockHeader } from '../block/tx-block';
 import { Storage } from '../../storage';
@@ -21,9 +22,7 @@ export class TXBlockchain {
     public readonly pendingTransactions = new CircularArray<Transaction>();
     public numberOfTransactions = 0;
 
-    public get getLastTXBlock() {
-        return this.txBlocks.getLast();
-    }
+    public lastblock: TxBlock | null = null;
 
     constructor(
         difficulty: number,
@@ -45,7 +44,7 @@ export class TXBlockchain {
         this.txBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
         this._storage.setNewTXBlock(minedBlock);
         this.numberOfTransactions = minedBlock.transactions.size();
-        this.pendingTransactions.reset();
+        this.lastblock = _.cloneDeep(minedBlock);
 
         return minedBlock;
     }
@@ -61,7 +60,7 @@ export class TXBlockchain {
      */
     public async createTXBlock(dsBlock: DSBlock) {
         try {
-            const lastBlock = this.getLastTXBlock;
+            const lastBlock = this.lastblock;
 
             if (!lastBlock) {
                 throw new Error('Should be has got genesisTxBlock.');
@@ -81,7 +80,9 @@ export class TXBlockchain {
                 newTxHeader
             );
 
-            newTxBlock.transactions = this.pendingTransactions;
+            newTxBlock.transactions = _.cloneDeep(this.pendingTransactions);
+
+            this.pendingTransactions.reset();
 
             await this._mineTxBlock(newTxBlock);
         } catch (err) {

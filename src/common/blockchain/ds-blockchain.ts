@@ -1,4 +1,5 @@
 import BN from 'bn.js';
+import _ from 'lodash';
 
 import { DSBlock, DSBlockHeader } from '../block';
 import { TxBlock } from '../block/tx-block';
@@ -21,9 +22,7 @@ export class DSBlockchain {
     public dsBlocks = new CircularArray<DSBlock>();
     public numberOfTransactions = 0;
 
-    public get getLastDSBlock() {
-        return this.dsBlocks.getLast();
-    }
+    public lastBlock: DSBlock;
 
     constructor(
         difficulty: number,
@@ -43,6 +42,20 @@ export class DSBlockchain {
         this._genesisBlockNumber = genesisBlockNumber;
         this._defaultMiner = defaultMiner;
         this._defaultGasPrice = defaultGasPrice;
+
+        const header = new DSBlockHeader(
+            this._version,
+            this._zeroHash,
+            this._dsDifficulty,
+            this._difficulty,
+            this._defaultMiner,
+            this._genesisBlockNumber,
+            this._defaultGasPrice
+        );
+        const timestamp = new Date().valueOf();
+        const newBlock = new DSBlock(timestamp, this._dsDifficulty, header);
+
+        this.lastBlock = _.cloneDeep(newBlock);
     }
 
     /**
@@ -50,7 +63,7 @@ export class DSBlockchain {
      * @param txBlocks - Some items of txBlocks.
      */
     public async createDSBlock(txBlocks: CircularArray<TxBlock>) {
-        const lastBlock = this.getLastDSBlock;
+        const lastBlock = this.lastBlock;
         const lastBlockHash = !lastBlock ? this._zeroHash : lastBlock.blockHash;
         const lastBlockNumber = !lastBlock ? this._genesisBlockNumber - 1 : lastBlock.getHeader().getBlockNum();
         const header = new DSBlockHeader(
@@ -72,10 +85,15 @@ export class DSBlockchain {
         const minedBlock = await this._pow.mineBlock<DSBlock>(newBlock);
 
         this.dsBlocks.add(minedBlock, minedBlock.getHeader().blockNum);
+        this.lastBlock = _.cloneDeep(minedBlock);;
         this._storage.setNewDSBlock(minedBlock);
     }
 
     public getBlock(blockNum: number) {
+        if (this.lastBlock.getHeader().blockNum === blockNum) {
+            return this.lastBlock;
+        }
+
         let foundDsBlock = this.dsBlocks.get(blockNum);
 
         if (!foundDsBlock) {

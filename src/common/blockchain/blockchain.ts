@@ -32,13 +32,13 @@ export class BlockChain {
     public numTxnsDSEpoch = 0;
 
     public get numTxBlocks() {
-        const lastBlock = this.txBlockchain.getLastTXBlock;
+        const lastBlock = this.txBlockchain.lastblock;
 
         return lastBlock?.getHeader().blockNum;
     }
 
     public get numDSBlocks() {
-        const lastBlock = this.dsBlockchain.getLastDSBlock;
+        const lastBlock = this.dsBlockchain.lastBlock;
 
         return lastBlock?.getHeader().blockNum;
     }
@@ -132,11 +132,11 @@ export class BlockChain {
                     this.emitter.emit(this.emitter.types.dsBlock);
                 }
     
-                if (!this.dsBlockchain.getLastDSBlock) {
+                if (!this.dsBlockchain.lastBlock) {
                     continue;
                 }
 
-                await this.txBlockchain.createTXBlock(this.dsBlockchain.getLastDSBlock);
+                await this.txBlockchain.createTXBlock(this.dsBlockchain.lastBlock);
     
                 this.dsBlockchain.numberOfTransactions += this.txBlockchain.numberOfTransactions;
                 this.emitter.emit(this.emitter.types.txBlock);
@@ -172,6 +172,23 @@ export class BlockChain {
                     return reject(err);
                 }
             }, 1000);
+        });
+    }
+
+    public getState() {
+        return JSON.stringify({
+            accounts: this._wallet.wallet.accounts,
+            lastDSBlock: this.dsBlockchain.lastBlock,
+            lastTXBlock: this.txBlockchain.lastblock,
+            difficulty: this.difficulty,
+            dsDifficulty: this.dsDifficulty,
+            genesisBlockNumber: this.genesisBlockNumber,
+            chainId: this.chainId,
+            zeroHash: this.zeroHash,
+            amountTxBlocksPearDSBlock: this.amountTxBlocksPearDSBlock,
+            defaultMiner: this.defaultMiner,
+            defaultGasPrice: this.defaultGasPrice,
+            version: this.version
         });
     }
 
