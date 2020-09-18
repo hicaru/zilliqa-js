@@ -127,9 +127,12 @@ export class BlockChain {
                     this.numTxnsDSEpoch = this.txBlockchain.txBlocks.size();
 
                     this.txBlockchain.txBlocks.clear();
-                    this.dsBlockchain.dsBlocks.clear();
                     this.dsBlockchain.numberOfTransactions = 0;
                     this.emitter.emit(this.emitter.types.dsBlock);
+
+                    if (this.dsBlockchain.dsBlocks.size() >= this.amountTxBlocksPearDSBlock) {
+                        this.dsBlockchain.dsBlocks.clear();
+                    }
                 }
     
                 if (!this.dsBlockchain.lastBlock) {
@@ -182,6 +185,7 @@ export class BlockChain {
             lastTXBlock: this.txBlockchain.lastblock,
             numberOfTransactionsInDS: this.dsBlockchain.numberOfTransactions,
             numberOfTransactionsInTX: this.txBlockchain.numberOfTransactions,
+            dsBlocks: this.dsBlockchain.dsBlocks,
             numTxnsDSEpoch: this.numTxnsDSEpoch,
             mnemonic: this._wallet.mnemonic,
             getNumTransactions: this.getNumTransactions,

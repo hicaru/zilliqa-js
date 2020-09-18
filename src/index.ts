@@ -1,6 +1,5 @@
 import { generateMnemonic } from 'bip39';
-import BN from 'bn.js';
-import { BlockChain, TxBlock, TxBlockHeader } from './common';
+import { BlockChain } from './common';
 import {
     DIFFICULTY,
     DS_DIFFICULTY,
@@ -11,7 +10,7 @@ import {
     MINER_PUBKEY,
     CHAIN_ID,
     DEFAULT_GAS_PRICE,
-    TX_BLOCKS_PEAR_DS_BLOCK, GasLimits
+    TX_BLOCKS_PEAR_DS_BLOCK
 } from './config';
 import App from './server';
 import { MemmoryStorage } from './storage';
