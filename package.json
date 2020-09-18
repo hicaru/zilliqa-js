@@ -1,6 +1,6 @@
 {
   "name": "zilliqa-js-implementation",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Zilliqa blockchain implementation on javascript.",
   "main": "dist/index.js",
   "types": "typings/index.d.ts",
