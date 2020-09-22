@@ -186,6 +186,7 @@ export class BlockChain {
             numberOfTransactionsInDS: this.dsBlockchain.numberOfTransactions,
             numberOfTransactionsInTX: this.txBlockchain.numberOfTransactions,
             dsBlocks: this.dsBlockchain.dsBlocks,
+            txBlocks: this.txBlockchain.txBlocks,
             numTxnsDSEpoch: this.numTxnsDSEpoch,
             mnemonic: this._wallet.mnemonic,
             getNumTransactions: this.getNumTransactions,
