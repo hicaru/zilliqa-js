@@ -10,12 +10,12 @@ const app = express();
 
 app.use(bodyParser.json());
 
-export default function(chain: BlockChain) {
+export default function(chain: BlockChain, port = PORT) {
     app.set('chain', chain);
     app.use(cors());
     app.use(middleware, routers);
 
-    app.listen(PORT, () => {
-        console.log(`⚡️[server]: Server is running at http://localhost:${PORT}`);
+    app.listen(port, () => {
+        console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
     });
 };
