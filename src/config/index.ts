@@ -32,7 +32,7 @@ export enum TransactionStatuses {
     FailedToAddContractAccountToState = 26
 }
 
-export const HOME_DIR = `${os.homedir()}/zilliqa-store`;
+export const HOME_DIR = os.homedir();
 export const VERSION = new BN(1);
 export const CHAIN_ID = new BN(334);
 export const ZERO_HASH = '0000000000000000000000000000000000000000000000000000000000000000';

@@ -1,5 +1,7 @@
 import BN from 'bn.js';
 import rimraf from 'rimraf';
+import path from 'path'
+import os from 'os'
 import { LocalStorage } from 'node-localstorage';
 import {
     DSBlock,
@@ -37,12 +39,14 @@ export class MemmoryStorage extends Storage {
     constructor() {
         super();
 
-        rimraf.sync(HOME_DIR);
+        const defaultPath = 'zilliqa-chain';
 
-        this._txns = new LocalStorage(`${HOME_DIR}/txns`);
-        this._txBlocks = new LocalStorage(`${HOME_DIR}/tx-blocks`);
-        this._dsBlocks = new LocalStorage(`${HOME_DIR}/ds-blocks`);
-        this._accounts = new LocalStorage(`${HOME_DIR}/accounts`);
+        rimraf.sync(path.join(HOME_DIR, defaultPath));
+
+        this._txns = new LocalStorage(path.join(HOME_DIR, defaultPath, 'txns'));
+        this._txBlocks = new LocalStorage(path.join(HOME_DIR, defaultPath, 'tx-blocks'));
+        this._dsBlocks = new LocalStorage(path.join(HOME_DIR, defaultPath, 'ds-blocks'));
+        this._accounts = new LocalStorage(path.join(HOME_DIR, defaultPath, 'accounts'));
     }
 
     getDSBlock(blockNumber: number) {
